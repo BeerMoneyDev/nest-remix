@@ -1,0 +1,63 @@
+{
+  "name": "nestjs-package-starter",
+  "version": "1.0.0",
+  "description": "NestJS npm package starter",
+  "author": {
+    "name": "Maximiliano \"Mex\" Delgado",
+    "email": "mdelgado@tresdoce.com.ar",
+    "url": "https://rudemex.github.io/"
+  },
+  "keywords": [
+    "nestjs",
+    "package",
+    "starter"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rudemex/nestjs-package-starter.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rudemex/nestjs-package-starter/issues"
+  },
+  "homepage": "https://github.com/rudemex/nestjs-package-starter#readme",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^7.5.1"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "husky": "^4.3.0",
+    "lerna": "^4.0.0",
+    "lint-staged": "^10.4.0",
+    "prettier": "^2.1.2"
+  },
+  "prettier": {
+    "semi": true,
+    "tabWidth": 2,
+    "singleQuote": true,
+    "printWidth": 100,
+    "trailingComma": "all"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,json,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "engines": {
+    "node": "14.4.0",
+    "npm": "6.14.5"
+  }
+}
