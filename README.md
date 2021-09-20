@@ -1,6 +1,7 @@
-<p align="center">
+<div align="center">
     <img alt="nestjs-package-starter" width="250" height="auto" src="https://camo.githubusercontent.com/c704e8013883cc3a04c7657e656fe30be5b188145d759a6aaff441658c5ffae0/68747470733a2f2f6e6573746a732e636f6d2f696d672f6c6f676f5f746578742e737667" />
-</p>
+    <h2>NestJS Package Starter</h2>
+</div>
 
 <p align="center">
     <img src="https://img.shields.io/static/v1.svg?style=flat&label=Node&message=v14.15.4&labelColor=339933&color=757575&logoColor=FFFFFF&logo=Node.js" alt="Node.js"/>
