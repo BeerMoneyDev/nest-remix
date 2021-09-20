@@ -123,11 +123,11 @@ Para publicar el paquete, podés configurar el `@pika/publish`, o bien podés ej
 una vez dentro de la carpeta `./pkg` previamente generada.
 
 ```bash
-npm publush
+npm publish
 ```
 
 ```bash
-yarn publush
+yarn publish
 ```
 
 <a name="commits"></a>
