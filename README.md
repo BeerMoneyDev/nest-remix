@@ -17,6 +17,7 @@
 ## Glosario
 
 - [📝 Requerimientos básicos](#basic-requirements)
+- [🙌 Let's start](#lets-start)
 - [🛠️ Instalar dependencias](#install-dependencies)
 - [💻 Scripts](#scripts)
 - [📤 Commits](#commits)
@@ -32,12 +33,42 @@
 - NPM v6.14.10 or higher
 - NestJS v8 or higher ([Documentación](https://nestjs.com/))
 
+<a name="lets-start"></a>
+
+## 🙌 Let's start
+
+Con el botón **Use this template**, creamos un repositorio nuevo en nuestro **GitHub** copiando todos los archivos del repositorio original, y luego hacemos un `git clone` del mismo.
+
+También podés ejecutar el siguiente script cambiando el nombre de destino
+
+```bash
+git clone https://github.com/rudemex/nestjs-package-starter.git <nombre-de-destino>
+```
+
+Example:
+```bash
+git clone https://github.com/rudemex/nestjs-package-starter.git my-awesome-package
+```
+
+Una vez clonado el repositorio, tenemos que cambiar el `name` del archivo `package.json`, ya que este va a ser el nombre del paquete a generar.
+
+```json
+{
+  ...,
+- "name": "nestjs-package-starter",
+  ...  
++ "name": "my-awesome-package",  
+  ...
+}
+```
+
+> 💬 También podés ajustar otras propiedades como el **author**, **description**, **keywords**, etc.
+
 <a name="install-dependencies"></a>
 
 ## 🛠️ Instalar dependencias
 
-Cuando tenemos los requisitos básicos, clonamos el repositorio, vamos a la carpeta del proyecto e instalamos sus
-dependencias.
+Estando en la carpeta del proyecto, instalamos sus dependencias con el script.
 
 ```
  npm install
@@ -60,6 +91,8 @@ cd ./pkg
 ```
 
 El folder `pkg` va a contener todo lo que necesitamos, desde los diferentes builds, hasta el `package.json` con las referencias a los módulos generados.
+
+Para probar localmente el paquete antes de publicarlo, podés utilizar el comando `npm link` estando dentro de la carpete `./pkg`, y luego instalarlo en tu proyecto para probarlo.
 
 ### Inicia los test con coverage
 
