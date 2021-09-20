@@ -46,39 +46,27 @@ dependencias.
 
 ## 💻 Scripts
 
-Inicia la aplicación en modo desarrollo
-
-```
-npm run start:dev
-```
-
-Inicia los test con coverage
-
-```
-npm run test
-```
-
-Realiza el build de la aplicación
+### Realiza el build del paquete
 
 ```
 npm run build
 ```
 
-Inicia la aplicación en modo productivo
+Los builds se hacen con una herramienta llamada `@pika/pack` que por debajo usa `rollup`, una vez que el build se realizó, vas a poder acceder al contenido generado entrando a:
 
-```
-npm run start
-```
-
-#### Otros scripts
-
-Formatea el código
-
-```
-npm run format
+```bash
+cd ./pkg
 ```
 
-Eslintea el código
+El folder `pkg` va a contener todo lo que necesitamos, desde los diferentes builds, hasta el `package.json` con las referencias a los módulos generados.
+
+### Inicia los test con coverage
+
+```
+npm run test
+```
+
+### Eslintea el código
 
 ```
 npm run lint
