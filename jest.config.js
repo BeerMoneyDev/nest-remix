@@ -9,15 +9,16 @@ module.exports = {
     transform: {
         '^.+\\.(t|j)s$': 'ts-jest',
     },
-    roots: ['<rootDir>/test/', '<rootDir>/src/'],
+    roots: ['<rootDir>/src/'],
     //collectCoverage: true,
-    collectCoverageFrom: ['**/*.(t|j)s', '!**/*.entity.(t|j)s'],
+    collectCoverageFrom: ['**/*.(t|j)s'],
     coverageDirectory: './coverage',
     coveragePathIgnorePatterns: [
         'node_modules',
         'node_modules/*',
         'dist',
         'dist/*',
+        'src/index.ts'
     ],
     testEnvironment: 'node',
     setupFilesAfterEnv: ['jest-extended'],

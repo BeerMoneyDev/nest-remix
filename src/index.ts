@@ -1,3 +1,1 @@
-export const getHello = (): string => {
-  return 'Hello from the new package!';
-}
+export * from './example/example.service';
