@@ -25,6 +25,8 @@
 
 ---
 
+> 💬 Este repositorio cuenta con una configuración base para **GitHub Actions**, **Codecov** y **SonarCloud**, las cuales se pueden remover fácilmente del proyecto o bien, terminar de configurarlas para aprovechar al maximo las buenas prácticas.
+
 <a name="basic-requirements"></a>
 
 ## 📝 Requerimientos básicos
@@ -37,7 +39,8 @@
 
 ## 🙌 Let's start
 
-Con el botón **Use this template**, creamos un repositorio nuevo en nuestro **GitHub** copiando todos los archivos del repositorio original, y luego hacemos un `git clone` del mismo.
+Con el botón **Use this template**, creamos un repositorio nuevo en nuestro **GitHub** copiando todos los archivos del
+repositorio original, y luego hacemos un `git clone` del mismo.
 
 También podés ejecutar el siguiente script cambiando el nombre de destino
 
@@ -46,18 +49,22 @@ git clone https://github.com/rudemex/nestjs-package-starter.git <nombre-de-desti
 ```
 
 Example:
+
 ```bash
 git clone https://github.com/rudemex/nestjs-package-starter.git my-awesome-package
 ```
 
-Una vez clonado el repositorio, tenemos que cambiar el `name` del archivo `package.json`, ya que este va a ser el nombre del paquete a generar.
+Una vez clonado el repositorio, tenemos que cambiar el `name` del archivo `package.json`, ya que este va a ser el nombre
+del paquete a generar.
 
 ```json
 {
   ...,
-- "name": "nestjs-package-starter",
-  ...  
-+ "name": "my-awesome-package",  
+  -
+  "name": "nestjs-package-starter",
+  ...
+  +
+  "name": "my-awesome-package",
   ...
 }
 ```
@@ -78,22 +85,6 @@ Estando en la carpeta del proyecto, instalamos sus dependencias con el script.
 
 ## 💻 Scripts
 
-### Realiza el build del paquete
-
-```
-npm run build
-```
-
-Los builds se hacen con una herramienta llamada `@pika/pack` que por debajo usa `rollup`, una vez que el build se realizó, vas a poder acceder al contenido generado entrando a:
-
-```bash
-cd ./pkg
-```
-
-El folder `pkg` va a contener todo lo que necesitamos, desde los diferentes builds, hasta el `package.json` con las referencias a los módulos generados.
-
-Para probar localmente el paquete antes de publicarlo, podés utilizar el comando `npm link` estando dentro de la carpete `./pkg`, y luego instalarlo en tu proyecto para probarlo.
-
 ### Inicia los test con coverage
 
 ```
@@ -106,11 +97,45 @@ npm run test
 npm run lint
 ```
 
+### Realiza el build del paquete
+
+```
+npm run build
+```
+
+Los builds se hacen con una herramienta llamada `@pika/pack` que por debajo usa `rollup`, una vez que el build se
+realizó, vas a poder acceder al contenido generado entrando a:
+
+```bash
+cd ./pkg
+```
+
+El folder `pkg` va a contener todo lo que necesitamos, desde los diferentes builds, hasta el `package.json` con las
+referencias a los módulos generados.
+
+Para probar localmente el paquete antes de publicarlo, podés utilizar el comando `npm link` estando dentro de la
+carpeta `./pkg`, y luego instalarlo en tu proyecto para
+probarlo. [más info](https://medium.com/@AidThompsin/how-to-npm-link-to-a-local-version-of-your-dependency-84e82126667a)
+
+### Publicar el paquete
+
+Para publicar el paquete, podés configurar el `@pika/publish`, o bien podés ejecutar alguno de los siguientes scripts
+una vez dentro de la carpeta `./pkg` previamente generada.
+
+```bash
+npm publush
+```
+
+```bash
+yarn publush
+```
+
 <a name="commits"></a>
 
 ## 📤 Commits
 
-Para los mensajes de commits se toma como referencia [`conventional commits`](https://www.conventionalcommits.org/en/v1.0.0-beta.4/#summary).
+Para los mensajes de commits se toma como
+referencia [`conventional commits`](https://www.conventionalcommits.org/en/v1.0.0-beta.4/#summary).
 
 ```
 <type>[optional scope]: <description>
