@@ -29,7 +29,7 @@
     "clean": "shx rm -rf pkg",
     "prebuild": "npm run clean",
     "build": "pika build",
-    "lint": "eslint \"{src,apps,libs,test,__test__}/**/*.{ts,js}\" --fix",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "publish": "pika publish",
     "version": "npm run build",
     "test": "jest --runInBand --detectOpenHandles --coverage"
@@ -42,6 +42,11 @@
     "rxjs": "^7.3.0"
   },
   "dependencies": {
+    "@nestjs/common": "^8.0.6",
+    "@nestjs/core": "^8.0.6",
+    "@nestjs/platform-express": "^8.0.6",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.3.0",
     "shx": "^0.3.3"
   },
   "devDependencies": {
@@ -114,8 +119,7 @@
         "@pika/plugin-standard-pkg",
         {
           "exclude": [
-            "**/__test__/*",
-            "**/*.{spec|it|test|e2e|e2e-spec}.*"
+            "**/__test__/*"
           ]
         }
       ],
@@ -123,8 +127,7 @@
         "@pika/plugin-build-node",
         {
           "exclude": [
-            "**/__test__/*",
-            "**/*.{spec|it|test|e2e|e2e-spec}.*"
+            "**/__test__/*"
           ]
         }
       ],
@@ -132,8 +135,7 @@
         "@pika/plugin-build-types",
         {
           "exclude": [
-            "**/__test__/*",
-            "**/*.{spec|it|test|e2e|e2e-spec}.*"
+            "**/__test__/*"
           ]
         }
       ]
