@@ -1,41 +1,33 @@
 {
   "name": "nestjs-package-starter",
-  "version": "1.0.0",
   "description": "NestJS npm package starter",
-  "author": {
-    "name": "Maximiliano \"Mex\" Delgado",
-    "email": "mdelgado@tresdoce.com.ar",
-    "url": "https://rudemex.github.io/"
-  },
+  "version": "1.0.0",
+  "license": "MIT",
+  "files": [
+    "dist-*/",
+    "bin/"
+  ],
+  "pika": true,
+  "sideEffects": false,
   "keywords": [
     "nestjs",
     "package",
     "starter"
   ],
+  "homepage": "https://github.com/rudemex/nestjs-package-starter#readme",
+  "bugs": {
+    "url": "https://github.com/rudemex/nestjs-package-starter/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rudemex/nestjs-package-starter.git"
   },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/rudemex/nestjs-package-starter/issues"
-  },
-  "homepage": "https://github.com/rudemex/nestjs-package-starter#readme",
-  "scripts": {
-    "clean": "shx rm -rf pkg",
-    "prebuild": "npm run clean",
-    "build": "pika build",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.{ts,js}\" --fix",
-    "publish": "pika publish",
-    "version": "npm run build",
-    "test": "jest --runInBand --detectOpenHandles --coverage"
+  "dependencies": {
+    "shx": "^0.3.3"
   },
   "peerDependencies": {
     "@nestjs/common": "^8.0.6",
     "@nestjs/core": "^8.0.6"
-  },
-  "dependencies": {
-    "shx": "^0.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
@@ -79,63 +71,12 @@
     "tsconfig-paths": "^3.11.0",
     "typescript": "^4.4.3"
   },
-  "prettier": {
-    "semi": true,
-    "tabWidth": 2,
-    "singleQuote": true,
-    "printWidth": 100,
-    "trailingComma": "all"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,json,md}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  "@pika/pack": {
-    "pipeline": [
-      [
-        "@pika/plugin-standard-pkg",
-        {
-          "exclude": [
-            "**/*.{spec|it|test|e2e|e2e-spec}.*"
-          ]
-        }
-      ],
-      [
-        "@pika/plugin-build-web",
-        {
-          "exclude": [
-            "**/*.{spec|it|test|e2e|e2e-spec}.*"
-          ]
-        }
-      ],
-      [
-        "@pika/plugin-build-node",
-        {
-          "exclude": [
-            "**/*.{spec|it|test|e2e|e2e-spec}.*"
-          ]
-        }
-      ],
-      [
-        "@pika/plugin-build-types",
-        {
-          "exclude": [
-            "**/*.{spec|it|test|e2e|e2e-spec}.*"
-          ]
-        }
-      ]
-    ]
-  },
   "engines": {
     "node": "14.4.0",
     "npm": "6.14.5"
-  }
+  },
+  "esnext": "dist-src/index.js",
+  "module": "dist-web/index.js",
+  "main": "dist-node/index.js",
+  "types": "dist-types/index.d.ts"
 }

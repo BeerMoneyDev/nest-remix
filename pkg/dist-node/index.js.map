@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sources":["../dist-src/index.js"],"sourcesContent":["export const getHello = () => {\n  return 'Hello from the new package!';\n};"],"names":["getHello"],"mappings":";;;;MAAaA,QAAQ,GAAG,MAAM;AAC5B,SAAO,6BAAP;AACD;;;;"}
