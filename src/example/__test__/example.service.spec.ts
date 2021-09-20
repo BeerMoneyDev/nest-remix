@@ -1,4 +1,3 @@
-/*
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExampleService } from '../example.service';
 
@@ -21,4 +20,3 @@ describe('ExampleService', () => {
     expect(service.getHello()).toBe('Hello from the new package!');
   });
 });
-*/
