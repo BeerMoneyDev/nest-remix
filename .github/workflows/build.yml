@@ -51,7 +51,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: "🎉 Publish"
-        run: "shx pkg && yarn publish --ignore-scripts"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
