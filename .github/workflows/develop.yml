@@ -52,6 +52,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: "🎉 Publish"
         run: |
+          shx cd pkg
           npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
           npm publish
         env:
