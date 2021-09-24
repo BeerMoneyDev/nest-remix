@@ -18,8 +18,9 @@
 
 - [📝 Requerimientos básicos](#basic-requirements)
 - [🙌 Let's start](#lets-start)
-- [🛠️ Instalar dependencias](#install-dependencies)
+- [📦 Instalar dependencias](#install-dependencies)
 - [💻 Scripts](#scripts)
+- [🛠️ Build and Publish](#build-and-publish)
 - [🔀 Workflows](#workflows)
 - [📤 Commits](#commits)
 - [📜 License MIT](license.md)
@@ -74,7 +75,7 @@ del paquete a generar.
 
 <a name="install-dependencies"></a>
 
-## 🛠️ Instalar dependencias
+## 📦 Instalar dependencias
 
 Estando en la carpeta del proyecto, instalamos sus dependencias con el script.
 
@@ -124,11 +125,13 @@ npm version <tag>
 npm publish
 ```
 
-### Build and Publish
+<a name="#uild-and-publish"></a>
+
+## 🛠️ Build and Publish
 
 Existen varias maneras para publicar el paquete en **npm**.
 
-##### Sencilla y rápida
+#### Sencilla y rápida
 
 La manera más sencilla y rápida de publicar el paquete es ejecutar el siguiente script y luego ir dentro de la carpeta
 `./pkg` previamente generada con el script de `build`.
@@ -141,7 +144,7 @@ npm publish
 
 > 💬 Podes reemplazar `npm publish` por `yarn publish`, y publicar el paquete tanto en **npm** como **yarn**
 
-##### La manera más óptima
+#### La manera más óptima
 
 Consiste en ejecutar el script de `version` con el tag correspondiente a desplegar, siguiendo la
 [sintaxis de versionado](https://docs.npmjs.com/about-semantic-versioning). Con esta forma, se actualiza automáticamente
@@ -153,9 +156,7 @@ cd ./pkg
 npm publish
 ```
 
--
-
-##### Automatizada
+#### Automatizada
 
 En la carpeta `.github/workflows` se encuentra los procesos automatizados para **GitHub Actions**, en esta se encuentra
 el pipeline para el publish, el cual realiza todos los pasos correspondientes de manera automatizada para el buildeado,
@@ -166,7 +167,7 @@ poder utilizar este método, es importante configurar los workflows que se detal
 
 <a name="workflows"></a>
 
-## 🔀 Workflows (Github Actions)
+## 🔀 Workflows (GitHub Actions)
 
 <a name="commits"></a>
 
