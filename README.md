@@ -184,13 +184,14 @@ Para poder hacer uso de los **workflows** que contiene este repositorio, primero
 correspondientes, o bien eliminar los procesos de los mismos.
 
 En los siguientes links, vas a encontrar toda la documentación para obtener los **tokens** de cada aplicación, que luego
-tendrás que configurarlo en como **secret** en el repositorio.
+tendrás que configurarlo en los **secrets** en el repositorio. [Configurar Secret](https://sergiodxa.com/articles/github-actions-npm-publish#configure-the-secret)
 
-- [Documentación Codecov.io](https://github.com/codecov/codecov-action)
-- [Documentación SonarCloud](https://github.com/SonarSource/sonarcloud-github-action)
-- [Documentación NPM](https://snyk.io/blog/github-actions-to-securely-publish-npm-packages/)
-- [Documentación GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
-- [Configurar Secret](https://sergiodxa.com/articles/github-actions-npm-publish#configure-the-secret)
+#### Secrets
+
+- `CODECOV_TOKEN` [Documentación Codecov.io](https://github.com/codecov/codecov-action)
+- `SONAR_TOKEN` [Documentación SonarCloud](https://github.com/SonarSource/sonarcloud-github-action)
+- `NPM_TOKEN` [Documentación NPM](https://snyk.io/blog/github-actions-to-securely-publish-npm-packages/)
+- `GH_TOKEN` [Documentación GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
 <a name="commits"></a>
 
