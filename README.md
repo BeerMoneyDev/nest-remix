@@ -46,13 +46,13 @@ repositorio original, y luego hacemos un `git clone` del mismo.
 
 También podés ejecutar el siguiente script cambiando el nombre de destino
 
-```bash
+```
 git clone https://github.com/rudemex/nestjs-package-starter.git <nombre-de-destino>
 ```
 
 Example:
 
-```bash
+```
 git clone https://github.com/rudemex/nestjs-package-starter.git my-awesome-package
 ```
 
@@ -103,11 +103,20 @@ Los builds se hacen con una herramienta llamada `@pika/pack` que por debajo usa 
 realizó, vas a encontrar el contenido generado en la carpeta `./pkg` que contiene los diferentes builds, hasta el
 `package.json` con las referencias a los módulos generados.
 
+```
+npm run build
+```
+
 Para probar localmente el paquete antes de publicarlo, podés utilizar el comando `npm link` estando dentro de la
 carpeta `./pkg`, y luego linkearlo en tu proyecto para probarlo. [más info](https://medium.com/@AidThompsin/how-to-npm-link-to-a-local-version-of-your-dependency-84e82126667a)
 
 ```
-npm run build
+cd ./pkg
+npm link
+
+npm link <name-of-package-json>
+
+npm unlink <name-of-package-json>
 ```
 
 ### Realiza el build del paquete y actualiza la version.
