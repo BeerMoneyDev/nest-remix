@@ -133,7 +133,7 @@ npm version <tag>
 npm publish
 ```
 
-<a name="#uild-and-publish"></a>
+<a name="#build-and-publish"></a>
 
 ## 🛠️ Build and Publish
 
