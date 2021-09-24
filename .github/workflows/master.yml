@@ -14,7 +14,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14.x'
-          registry-url: 'https://registry.npmjs.org'
       - name: "✅ Checkout repository"
         uses: actions/checkout@v2
 
@@ -25,14 +24,14 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: "💾 Restore packages from cache"
+      - name: "💾 Restore Dependencies from cache"
         uses: actions/cache@v2
         with:
           path: |
             node_modules
             */*/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-      - name: "📦 Install packages"
+      - name: "📦 Install Dependencies"
         run: npm install
       - name: "🔦 Lint"
         run: npm run lint

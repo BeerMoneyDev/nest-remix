@@ -1,0 +1,66 @@
+name: "Publish pkg to NPM"
+
+on:
+  workflow_dispatch:
+    inputs:
+      newVersion:
+        description: "Version to publish: v[MAJOR].[MINOR].[PATCH]"
+        required: true
+        default: 'v0.0.0'
+
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "⚙ Set up Node.js"
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - name: "✅ Checkout repository"
+        uses: actions/checkout@v2
+
+  publish:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: "💾 Restore Dependencies from cache"
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+      - name: "📦 Install Dependencies"
+        run: npm install
+      - name: "🔦 Lint"
+        run: npm run lint
+      - name: "🔨 Build"
+        run: npm run build
+      - name: "👨‍💻 Run Test"
+        run: npm run test
+        env:
+          NODE_ENV: 'test'
+      - name: "🎉 Publish NPM PKG: ${{github.event.inputs.newVersion}}"
+        run: |
+          git config --global user.name "GitHub CD bot"
+          git config --global user.email "you-email@example.com"
+          npm version ${{github.event.inputs.newVersion}}
+          cd ./pkg
+          npm config set '//registry.npmjs.org/:_authToken' "${NODE_AUTH_TOKEN}"
+          npm publish
+          cd ..
+          git push
+      - name: "🏷️ Create Release: ${{github.event.inputs.newVersion}}"
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{github.event.inputs.newVersion}}
+          release_name: ${{github.event.inputs.newVersion}}
+          draft: false
+          prerelease: false

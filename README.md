@@ -20,6 +20,7 @@
 - [🙌 Let's start](#lets-start)
 - [🛠️ Instalar dependencias](#install-dependencies)
 - [💻 Scripts](#scripts)
+- [🔀 Workflows](#workflows)
 - [📤 Commits](#commits)
 - [📜 License MIT](license.md)
 
@@ -99,36 +100,70 @@ npm run lint
 
 ### Realiza el build del paquete
 
+Los builds se hacen con una herramienta llamada `@pika/pack` que por debajo usa `rollup`, una vez que el build se
+realizó, vas a encontrar el contenido generado en la carpeta `./pkg` que contiene los diferentes builds, hasta el
+`package.json` con las referencias a los módulos generados.
+
+Para probar localmente el paquete antes de publicarlo, podés utilizar el comando `npm link` estando dentro de la
+carpeta `./pkg`, y luego linkearlo en tu proyecto para probarlo. [más info](https://medium.com/@AidThompsin/how-to-npm-link-to-a-local-version-of-your-dependency-84e82126667a)
+
 ```
 npm run build
 ```
 
-Los builds se hacen con una herramienta llamada `@pika/pack` que por debajo usa `rollup`, una vez que el build se
-realizó, vas a poder acceder al contenido generado entrando a:
+### Realiza el build del paquete y actualiza la version.
 
-```bash
-cd ./pkg
+```
+npm version <tag>
+// npm version v1.2.3
 ```
 
-El folder `pkg` va a contener todo lo que necesitamos, desde los diferentes builds, hasta el `package.json` con las
-referencias a los módulos generados.
+### Publicar paquete
 
-Para probar localmente el paquete antes de publicarlo, podés utilizar el comando `npm link` estando dentro de la
-carpeta `./pkg`, y luego instalarlo en tu proyecto para
-probarlo. [más info](https://medium.com/@AidThompsin/how-to-npm-link-to-a-local-version-of-your-dependency-84e82126667a)
-
-### Publicar el paquete
-
-Para publicar el paquete, podés configurar el `@pika/publish`, o bien podés ejecutar alguno de los siguientes scripts
-una vez dentro de la carpeta `./pkg` previamente generada.
-
-```bash
+```
 npm publish
 ```
 
-```bash
-yarn publish
-```
+### Build and Publish
+
+Existen varias maneras para publicar el paquete en **npm**.
+
+- **Sencilla y rápida**: La manera más sencilla y rápida de publicar el paquete es ejecutar alguno de los siguientes
+  scripts estando dentro de la carpeta `./pkg` previamente generada con el script de `build`.
+
+      ##### Para NPM
+
+      ```bash
+      npm run build
+      cd ./pkg
+      npm publish
+      ```
+
+      ##### Para NPM y YANR
+      ```bash
+      npm run build
+      cd ./pkg
+      yarn publish
+      ```
+
+- **La manera más óptima**: Consiste en ejecutar el script de `version` con el tag correspondiente a desplegar, siguiendo la
+  [sintaxis de versionado](https://docs.npmjs.com/about-semantic-versioning). Con esta forma, se actualiza automáticamente
+  la version del `package.json`, y solo queda pushear al repositorio los cambios generados.
+      ```bash
+      npm version v1.0.1
+      cd ./pkg
+      npm publish
+      ```
+- **Automatizada**: en la carpeta `.github/workflows` se encuentra los procesos automatizados para **GitHub Actions**,
+  en esta se encuentra el pipeline para el publish, el cual realiza todos los pasos correspondientes de manera automatizada
+  para el buildeado, publicación y versionado del repositorio con solo correr manualmente el action con la version a desplegar,
+  pero para poder utilizar este método, es importante configurar los workflows que se detalla a continuación.
+
+<img src="./.readme-static/github-workflow-publish.png" width="350" alt="Workflow to publish" />
+
+<a name="workflows"></a>
+
+## 🔀 Workflows (Github Actions)
 
 <a name="commits"></a>
 
