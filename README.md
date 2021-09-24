@@ -36,6 +36,7 @@
 - Node.js v14.15.4 or higher ([Download](https://nodejs.org/es/download/))
 - NPM v6.14.10 or higher
 - NestJS v8 or higher ([Documentación](https://nestjs.com/))
+- Cuenta en NPM y/o YARN
 
 <a name="lets-start"></a>
 
@@ -140,16 +141,16 @@ Existen varias maneras para publicar el paquete en **npm**.
 
 #### Sencilla y rápida
 
-La manera más sencilla y rápida de publicar el paquete es ejecutar el siguiente script y luego ir dentro de la carpeta
-`./pkg` previamente generada con el script de `build`.
+La manera más sencilla y rápida de publicar el paquete es ejecutar el script de `build` y luego ir dentro de la carpeta
+`./pkg` y ejecutar el script de `publish`.
 
-```bash
+```
 npm run build
 cd ./pkg
 npm publish
 ```
 
-> 💬 Podes reemplazar `npm publish` por `yarn publish`, y publicar el paquete tanto en **npm** como **yarn**
+> 💬 Podés reemplazar `npm publish` por `yarn publish`, y publicar el paquete tanto en **npm** como **yarn**
 
 #### La manera más óptima
 
@@ -161,13 +162,15 @@ la version del `package.json`, y solo queda pushear al repositorio los cambios g
 npm version v1.0.1
 cd ./pkg
 npm publish
+
+git push
 ```
 
 #### Automatizada
 
 En la carpeta `.github/workflows` se encuentra los procesos automatizados para **GitHub Actions**, en esta se encuentra
-el pipeline para el publish, el cual realiza todos los pasos correspondientes de manera automatizada para el buildeado,
-publicación y versionado del repositorio con solo correr manualmente el action con la version a desplegar, pero para
+el pipeline para el publish, el cual realiza todos los pasos correspondientes de manera automatizada para compilar el
+paquete, publicarlo y versionar el repositorio con solo ingresar manualmente la version a desplegar, pero para
 poder utilizar este método, es importante configurar los workflows que se detalla a continuación.
 
 <img src="./.readme-static/github-workflow-publish.png" width="350" alt="Workflow to publish" />
