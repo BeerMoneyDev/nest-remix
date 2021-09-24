@@ -128,36 +128,39 @@ npm publish
 
 Existen varias maneras para publicar el paquete en **npm**.
 
-- **Sencilla y rápida**: La manera más sencilla y rápida de publicar el paquete es ejecutar alguno de los siguientes
-  scripts estando dentro de la carpeta `./pkg` previamente generada con el script de `build`.
+##### Sencilla y rápida
 
-      ##### Para NPM
+La manera más sencilla y rápida de publicar el paquete es ejecutar el siguiente script y luego ir dentro de la carpeta
+`./pkg` previamente generada con el script de `build`.
 
-      ```bash
-      npm run build
-      cd ./pkg
-      npm publish
-      ```
+```bash
+npm run build
+cd ./pkg
+npm publish
+```
 
-      ##### Para NPM y YANR
-      ```bash
-      npm run build
-      cd ./pkg
-      yarn publish
-      ```
+> 💬 Podes reemplazar `npm publish` por `yarn publish`, y publicar el paquete tanto en **npm** como **yarn**
 
-- **La manera más óptima**: Consiste en ejecutar el script de `version` con el tag correspondiente a desplegar, siguiendo la
-  [sintaxis de versionado](https://docs.npmjs.com/about-semantic-versioning). Con esta forma, se actualiza automáticamente
-  la version del `package.json`, y solo queda pushear al repositorio los cambios generados.
-      ```bash
-      npm version v1.0.1
-      cd ./pkg
-      npm publish
-      ```
-- **Automatizada**: en la carpeta `.github/workflows` se encuentra los procesos automatizados para **GitHub Actions**,
-  en esta se encuentra el pipeline para el publish, el cual realiza todos los pasos correspondientes de manera automatizada
-  para el buildeado, publicación y versionado del repositorio con solo correr manualmente el action con la version a desplegar,
-  pero para poder utilizar este método, es importante configurar los workflows que se detalla a continuación.
+##### La manera más óptima
+
+Consiste en ejecutar el script de `version` con el tag correspondiente a desplegar, siguiendo la
+[sintaxis de versionado](https://docs.npmjs.com/about-semantic-versioning). Con esta forma, se actualiza automáticamente
+la version del `package.json`, y solo queda pushear al repositorio los cambios generados.
+
+```bash
+npm version v1.0.1
+cd ./pkg
+npm publish
+```
+
+-
+
+##### Automatizada
+
+En la carpeta `.github/workflows` se encuentra los procesos automatizados para **GitHub Actions**, en esta se encuentra
+el pipeline para el publish, el cual realiza todos los pasos correspondientes de manera automatizada para el buildeado,
+publicación y versionado del repositorio con solo correr manualmente el action con la version a desplegar, pero para
+poder utilizar este método, es importante configurar los workflows que se detalla a continuación.
 
 <img src="./.readme-static/github-workflow-publish.png" width="350" alt="Workflow to publish" />
 
