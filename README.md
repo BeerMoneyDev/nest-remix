@@ -62,10 +62,8 @@ del paquete a generar.
 ```json
 {
   ...,
-  -
   "name": "nestjs-package-starter",
   ...
-  +
   "name": "my-awesome-package",
   ...
 }
