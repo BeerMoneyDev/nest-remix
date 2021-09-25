@@ -30,6 +30,7 @@
     "prebuild": "npm run clean",
     "build": "pika build",
     "lint": "eslint \"{src,apps,libs,test,__test__}/**/*.ts\" --fix",
+    "pre-commit": "lint-staged",
     "publish": "pika publish",
     "version": "npm run build",
     "test": "jest --runInBand --detectOpenHandles --coverage"
