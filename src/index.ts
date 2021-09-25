@@ -1,5 +1,5 @@
 // export public api from here
 // for example:
 // export * from './decorators';
-export * from './test';
-export * from './test.service';
+export * from './greeting/greeting.module';
+export * from './greeting/services/greeting.service';
