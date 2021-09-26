@@ -188,10 +188,10 @@ tendrás que configurarlo en los **secrets** en el repositorio. [Configurar Secr
 
 #### Secrets
 
+- `GH_TOKEN` [Documentación GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+- `NPM_TOKEN` [Documentación NPM](https://snyk.io/blog/github-actions-to-securely-publish-npm-packages/)
 - `CODECOV_TOKEN` [Documentación Codecov.io](https://github.com/codecov/codecov-action)
 - `SONAR_TOKEN` [Documentación SonarCloud](https://github.com/SonarSource/sonarcloud-github-action)
-- `NPM_TOKEN` [Documentación NPM](https://snyk.io/blog/github-actions-to-securely-publish-npm-packages/)
-- `GH_TOKEN` [Documentación GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
 <a name="commits"></a>
 
