@@ -7,7 +7,8 @@
     <img src="https://img.shields.io/static/v1.svg?style=flat&label=Node&message=v14.15.4&labelColor=339933&color=757575&logoColor=FFFFFF&logo=Node.js" alt="Node.js"/>
     <img src="https://img.shields.io/static/v1.svg?style=flat&label=Npm&message=v6.14.10&labelColor=CB3837&logoColor=FFFFFF&color=757575&logo=npm" alt="Npm"/>
     <img src="https://img.shields.io/static/v1.svg?style=flat&label=NestJs&message=v8.0.6&labelColor=E0234E&logoColor=FFFFFF&color=757575&logo=Nestjs" alt="NestJs"/>
-    <img alt="GitHub license" src="https://img.shields.io/github/license/rudemex/nestjs-package-starter?style=flat"><br/>
+    <img alt="GitHub license" src="https://img.shields.io/github/license/rudemex/nestjs-package-starter?style=flat">
+    <br/>
     <img alt="GitHub Workflow Status" src="https://github.com/rudemex/nestjs-package-starter/actions/workflows/master.yml/badge.svg?branch=master">
     <img alt="Codecov" src="https://img.shields.io/codecov/c/github/rudemex/nestjs-package-starter?logoColor=FFFFFF&logo=Codecov&labelColor=#F01F7A">
     <img src="https://sonarcloud.io/api/project_badges/measure?project=rudemex_nestjs-package-starter&metric=alert_status" alt="sonarcloud">
@@ -24,6 +25,7 @@
 - [🛠️ Build and Publish](#build-and-publish)
 - [🔀 Workflows](#workflows)
 - [📤 Commits](#commits)
+- [📄 Changelog](./CHANGELOG.md)
 - [📜 License MIT](license.md)
 
 ---
@@ -65,8 +67,10 @@ del paquete a generar.
 {
   ...,
   "name": "nestjs-package-starter",
+  "version": "x.x.x",
   ...
   "name": "my-awesome-package",
+  "version": "0.0.1",
   ...
 }
 ```
@@ -188,6 +192,7 @@ tendrás que configurarlo en los **secrets** en el repositorio. [Configurar Secr
 
 #### Secrets
 
+- `GH_EMAIL` GitHub User Email
 - `GH_TOKEN` [Documentación GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 - `NPM_TOKEN` [Documentación NPM](https://snyk.io/blog/github-actions-to-securely-publish-npm-packages/)
 - `CODECOV_TOKEN` [Documentación Codecov.io](https://github.com/codecov/codecov-action)
@@ -211,6 +216,10 @@ referencia [`conventional commits`](https://www.conventionalcommits.org/en/v1.0.
 - **type:** chore, docs, feat, fix, refactor (más comunes)
 - **scope:** indica la página, componente, funcionalidad
 - **description:** comienza en minúsculas y no debe superar los 72 caracteres.
+
+## 📄 Changelog
+
+All notable changes to this project will be documented in [Changelog](./CHANGELOG.md) file.
 
 ---
 

@@ -11,6 +11,7 @@ on:
 env:
   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  GITHUB_EMAIL: ${{ secrets.GH_EMAIL }}
 
 jobs:
   setup:
@@ -50,7 +51,7 @@ jobs:
       - name: "🎉 Publish NPM PKG: ${{github.event.inputs.newVersion}}"
         run: |
           git config --global user.name "GitHub CD bot"
-          git config --global user.email "you-email@example.com"
+          git config --global user.email "${GITHUB_EMAIL}"
           npm version ${{github.event.inputs.newVersion}}
           cd ./pkg
           npm config set '//registry.npmjs.org/:_authToken' "${NODE_AUTH_TOKEN}"
