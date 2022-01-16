@@ -3,8 +3,8 @@
   "path": "./",
   "releaseCommitMessageFormat": "ci(release): bumped version to {{currentTag}}",
   "types": [
-    {"type": "feat", "section": "✨ Features"},
-    {"type": "fix", "section": "\uD83D\uDC1B Bug Fixes"},
+    {"type": "feat", "section": "✨ Features", "hidden": false},
+    {"type": "fix", "section": "\uD83D\uDC1B Bug Fixes", "hidden": false},
     {"type": "chore", "section": "👨‍💻 Chores", "hidden": false},
     {"type": "docs", "section": "\uD83D\uDCDD Docs", "hidden": false},
     {"type": "refactor", "section": "♻️Refactors", "hidden": false},
@@ -15,6 +15,10 @@
     {"type": "ci", "hidden": true},
     {"type": "revert", "hidden": true}
   ],
+  "commitUrlFormat": "https://github.com/rudemex/nestjs-package-starter/commit/{{hash}}",
+  "compareUrlFormat": "https://github.com/rudemex/nestjs-package-starter/compare/{{previousTag}}...{{currentTag}}",
+  "issuePrefixes": ["#"],
+  "issueUrlFormat": "https://github.com/rudemex/nestjs-package-starter/issues/{{id}}",
   "issuePrefixes": ["#"],
   "skip": {
     "bump": false,
