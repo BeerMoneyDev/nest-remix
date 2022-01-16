@@ -175,10 +175,10 @@ git push
 
 En la carpeta `.github/workflows` se encuentra los procesos automatizados para **GitHub Actions**, en esta se encuentra
 el pipeline para el publish, el cual realiza todos los pasos correspondientes de manera automatizada para compilar el
-paquete, publicarlo y versionar el repositorio con solo ingresar manualmente la version a desplegar, pero para
+paquete, publicarlo y versionar el repositorio con solo seleccionar el tipo de version a desplegar, pero para
 poder utilizar este método, es importante configurar los workflows que se detalla a continuación.
 
-<img src="./.readme-static/github-workflow-publish.png" width="350" alt="Workflow to publish" />
+<img src=".readme-static/github-workflow-publish.png" width="300" alt="Workflow to publish" />
 
 <a name="workflows"></a>
 
