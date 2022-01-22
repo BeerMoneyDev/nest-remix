@@ -2,6 +2,13 @@
 
 ---
 
+### [1.1.2](https://github.com/rudemex/nestjs-package-starter/compare/v1.1.1...v1.1.2) (2022-01-22)
+
+
+### 👨‍💻 Chores
+
+* **templates:** edit issue and feature request templates ([ccd904e](https://github.com/rudemex/nestjs-package-starter/commit/ccd904ecbca0de728c448fce6802e478aeeab26b))
+
 ### [1.1.1](https://github.com/rudemex/nestjs-package-starter/compare/v1.1.0...v1.1.1) (2022-01-22)
 
 
