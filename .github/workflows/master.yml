@@ -24,6 +24,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: "💾 Restore Dependencies from cache"
         uses: actions/cache@v2
         with:
@@ -31,27 +32,33 @@ jobs:
             node_modules
             */*/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
       - name: "📦 Install Dependencies"
         run: npm install
+
       - name: "🔦 Lint"
         run: npm run lint
+
       - name: "🔨 Build"
         run: npm run build
+
       - name: "👨‍💻 Run Test"
         run: npm run test
         env:
           NODE_ENV: 'test'
+
       - name: "📊 Upload coverage report to Codecov"
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
       - name: "📊 SonarCloud Scan"
         uses: SonarSource/sonarcloud-github-action@master
         with:
           args: >
-            -Dsonar.organization=${{ github.event.repository.owner.name }}
-            -Dsonar.projectKey=${{ github.event.repository.owner.name }}_${{ github.event.repository.name }}
-            -Dsonar.projectName=${{ github.event.repository.owner.name }}_${{ github.event.repository.name }}
+            -Dsonar.organization=${{ github.repository_owner }}
+            -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
+            -Dsonar.projectName=${{ github.repository_owner }}_${{ github.event.repository.name }}
             -Dsonar.projectVersion=1.0
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.sources=./src
