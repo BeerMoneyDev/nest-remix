@@ -2,6 +2,14 @@
 
 ---
 
+### [1.1.3](https://github.com/rudemex/nestjs-package-starter/compare/v1.1.2...v1.1.3) (2022-02-23)
+
+
+### 👨‍💻 Chores
+
+* update dependencies ([8756457](https://github.com/rudemex/nestjs-package-starter/commit/87564576ffafaba0b2d89d84f00d6d92b33992e8))
+* **workflow:** change param github repo owner ([f95575c](https://github.com/rudemex/nestjs-package-starter/commit/f95575c6e6b04eaf29f58fe9a75de6eeac1abfbb))
+
 ### [1.1.2](https://github.com/rudemex/nestjs-package-starter/compare/v1.1.1...v1.1.2) (2022-01-22)
 
 
