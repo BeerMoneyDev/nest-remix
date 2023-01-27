@@ -1,143 +1,101 @@
 {
-  "name": "nestjs-package-starter",
-  "version": "1.1.3",
-  "description": "NestJS npm package starter",
-  "author": {
-    "name": "Maximiliano \"Mex\" Delgado",
-    "email": "mdelgado@tresdoce.com.ar",
-    "url": "https://rudemex.github.io/"
-  },
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "keywords": [
-    "nestjs",
-    "package",
-    "starter"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rudemex/nestjs-package-starter.git"
-  },
+  "name": "nest-remix",
+  "version": "0.0.4",
+  "description": "An interop layer between NestJS and Remix",
+  "author": "Kerry Ritter",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/rudemex/nestjs-package-starter/issues"
-  },
-  "homepage": "https://github.com/rudemex/nestjs-package-starter#readme",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
-    "prebuild": "shx rm -rf pkg",
-    "build": "pika build",
-    "lint": "eslint \"{src,apps,libs,test,__test__}/**/*.ts\" --fix",
-    "pre-commit": "lint-staged",
-    "publish": "pika publish",
-    "release": "standard-version",
-    "test": "jest --runInBand --detectOpenHandles --coverage"
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest --coverage --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "build:schematics": "tsc -p tsconfig.schematics.json",
+    "package": "npm run build && cp package.json dist/package.json && cp .npmrc dist/.npmrc && npm run build:schematics && cp -r schematics dist/schematics",
+    "release": "npm publish"
   },
   "peerDependencies": {
-    "@nestjs/common": "^8.2.0",
-    "@nestjs/core": "^8.2.0",
-    "@nestjs/platform-express": "^8.2.0",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.5.2"
+    "@nestjs/common": "^9.0.0",
+    "@nestjs/core": "^9.0.0",
+    "@nestjs/platform-express": "^9.0.0",
+    "@remix-run/express": "^1.6.7",
+    "@remix-run/node": "^1.6.7",
+    "@remix-run/react": "^1.6.7",
+    "@remix-run/serve": "^1.6.7",
+    "cache-manager": "^5.1.4",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0"
   },
   "dependencies": {
-    "@nestjs/common": "^8.2.6",
-    "@nestjs/core": "^8.2.6",
-    "@nestjs/platform-express": "^8.2.6",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.5.2",
-    "shx": "^0.3.4"
+    "@angular-devkit/core": "^13.3.0",
+    "@angular-devkit/schematics": "^13.3.0",
+    "@schematics/angular": "~13.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.10",
-    "@babel/plugin-proposal-class-properties": "^7.16.7",
-    "@babel/plugin-proposal-decorators": "^7.16.7",
-    "@babel/plugin-proposal-object-rest-spread": "^7.16.7",
-    "@babel/plugin-proposal-optional-chaining": "^7.16.7",
-    "@babel/preset-typescript": "^7.16.7",
-    "@commitlint/cli": "^16.1.0",
-    "@commitlint/config-conventional": "^16.0.0",
-    "@nestjs/cli": "^8.2.0",
-    "@nestjs/schematics": "^8.0.4",
-    "@nestjs/testing": "^8.2.5",
-    "@pika/cli": "^0.2.0",
-    "@pika/pack": "^0.5.0",
-    "@pika/plugin-build-node": "^0.9.2",
-    "@pika/plugin-build-types": "^0.9.2",
-    "@pika/plugin-standard-pkg": "^0.9.2",
-    "@pika/plugin-ts-standard-pkg": "^0.9.2",
+    "@architect/architect": "^10.8.2",
+    "@nestjs/cli": "^9.0.0",
+    "@nestjs/common": "^9.0.0",
+    "@nestjs/core": "^9.0.0",
+    "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/schematics": "^9.0.0",
+    "@nestjs/serve-static": "^3.0.0",
+    "@nestjs/testing": "^9.0.0",
+    "@remix-run/dev": "^1.6.7",
+    "@remix-run/eslint-config": "^1.6.7",
+    "@remix-run/express": "^1.6.7",
+    "@remix-run/node": "^1.6.7",
+    "@remix-run/react": "^1.6.7",
+    "@remix-run/serve": "^1.6.7",
     "@types/express": "^4.17.13",
-    "@types/jest": "^27.4.0",
-    "@types/node": "^17.0.19",
+    "@types/jest": "27.4.1",
+    "@types/node": "^16.0.0",
+    "@types/react": "^17.0.47",
+    "@types/react-dom": "^17.0.17",
     "@types/supertest": "^2.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.10.0",
-    "@typescript-eslint/parser": "^5.10.0",
-    "eslint": "^8.7.0",
-    "eslint-config-prettier": "^8.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "cache-manager": "^5.1.4",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "concurrently": "^7.6.0",
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^4.3.0",
-    "jest": "^27.4.7",
-    "jest-extended": "^2.0.0",
-    "jest-sonar-reporter": "^2.0.0",
-    "lint-staged": "^12.2.2",
-    "prettier": "^2.5.1",
+    "jest": "^27.2.5",
+    "prettier": "^2.3.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "supertest": "^6.2.2",
-    "standard-version": "^9.3.2",
-    "ts-jest": "^27.1.2",
-    "ts-loader": "^9.2.6",
-    "ts-node": "^10.4.0",
-    "tsconfig-paths": "^3.12.0",
-    "typescript": "^4.5.5"
+    "rxjs": "^7.2.0",
+    "semantic-release": "^17.4.7",
+    "source-map-support": "^0.5.20",
+    "supertest": "^6.1.3",
+    "ts-jest": "^27.0.3",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.0.0",
+    "tsconfig-paths": "^3.10.1",
+    "typescript": "^4.9.4"
   },
-  "commitlint": {
-    "extends": "@commitlint/config-conventional"
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.test\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
   },
-  "prettier": {
-    "semi": true,
-    "tabWidth": 2,
-    "singleQuote": true,
-    "printWidth": 100,
-    "trailingComma": "all"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged && jest"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,json,md}": [
-      "prettier --write"
-    ]
-  },
-  "@pika/pack": {
-    "pipeline": [
-      [
-        "@pika/plugin-ts-standard-pkg",
-        {
-          "exclude": [
-            "**/__test__/*"
-          ]
-        }
-      ],
-      [
-        "@pika/plugin-build-node",
-        {
-          "exclude": [
-            "**/__test__/*"
-          ]
-        }
-      ],
-      [
-        "@pika/plugin-build-types",
-        {
-          "exclude": [
-            "**/__test__/*"
-          ]
-        }
-      ]
-    ]
-  }
+  "schematics": "./schematics/collection.json"
 }

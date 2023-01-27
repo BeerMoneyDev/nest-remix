@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "incremental": true,
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "lib": ["es2019", "esnext.asynciterable", "DOM", "DOM.Iterable"],
+    "module": "commonjs",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2019",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "noEmit": true
+  },
+  "include": ["src", "remix.env.d.ts"],
+  "exclude": ["build", "scripts", "dist", "test", "node_modules"]
+}

@@ -2,7 +2,11 @@
 /dist
 /node_modules
 package-lock.json
-pkg
+
+# Schematics
+schematics/**/*.js
+schematics/**/*.js.map
+schematics/**/*.d.ts
 
 # Logs
 logs

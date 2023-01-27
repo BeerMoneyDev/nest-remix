@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "NestPrismaSchematics",
+  "title": "Prisma Support Schema",
+  "type": "object",
+  "description": "Add Prisma support to the NestJS application",
+  "properties": {
+    "overwriteTsconfig": {
+      "type": "boolean",
+      "x-prompt": "Overwrite the tsconfig.json with known working configuration?",
+      "description": "Overwrite the tsconfig",
+      "default": true
+    },
+    "overwriteNpmScripts": {
+      "type": "boolean",
+      "x-prompt": "Overwrite the package.json `build` and `start` with scripts known working configurations?",
+      "description": "Overwrite the package.json scripts",
+      "default": true
+    },
+    "overwriteAppModule": {
+      "type": "boolean",
+      "x-prompt": "Update app.module.ts with @RemixModule() configuration?",
+      "description": "Overwrite the package.json scripts",
+      "default": true
+    }
+  }
+}
