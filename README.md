@@ -1,231 +1,188 @@
+<h1 align="center">nest-remix</h1>
+<br />
 <div align="center">
-    <img alt="nestjs-package-starter" width="250" height="auto" src="https://camo.githubusercontent.com/c704e8013883cc3a04c7657e656fe30be5b188145d759a6aaff441658c5ffae0/68747470733a2f2f6e6573746a732e636f6d2f696d672f6c6f676f5f746578742e737667" />
-    <h3>NestJS Package Starter</h3>
+  <strong>An interop layer between NestJS and Remix</strong>
+</div>
+<br />
+<div align="center">
+<a href="https://www.npmjs.com/package/nest-remix"><img src="https://img.shields.io/npm/v/nest-remix.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/package/nest-remix"><img src="https://img.shields.io/npm/l/nest-remix.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/package/nest-remix"><img src="https://img.shields.io/npm/dm/nest-remix.svg" alt="NPM Downloads" /></a>
 </div>
 
-<p align="center">
-    <img src="https://img.shields.io/static/v1.svg?style=flat&label=Node&message=v14.15.4&labelColor=339933&color=757575&logoColor=FFFFFF&logo=Node.js" alt="Node.js"/>
-    <img src="https://img.shields.io/static/v1.svg?style=flat&label=Npm&message=v6.14.10&labelColor=CB3837&logoColor=FFFFFF&color=757575&logo=npm" alt="Npm"/>
-    <img src="https://img.shields.io/static/v1.svg?style=flat&label=NestJs&message=v8.2.6&labelColor=E0234E&logoColor=FFFFFF&color=757575&logo=Nestjs" alt="NestJs"/>
-    <img alt="GitHub license" src="https://img.shields.io/github/license/rudemex/nestjs-package-starter?style=flat">
-    <br/>
-    <img alt="GitHub Workflow Status" src="https://github.com/rudemex/nestjs-package-starter/actions/workflows/master.yml/badge.svg?branch=master">
-    <img alt="Codecov" src="https://img.shields.io/codecov/c/github/rudemex/nestjs-package-starter?logoColor=FFFFFF&logo=Codecov&labelColor=#F01F7A">
-    <img src="https://sonarcloud.io/api/project_badges/measure?project=rudemex_nestjs-package-starter&metric=alert_status" alt="sonarcloud">
-    <img alt="GitHub package.json version" src="https://img.shields.io/github/package-json/v/rudemex/nestjs-package-starter">
-    <br/> 
-</p>
+# Features
 
-## Glosario
+- Serving of a Remix build through a custom NestJS server implementation.
+- Support of using NestJS @Injectable() services as Remix `action` and `loader` functions via `wireBackend`
 
-- [📝 Requerimientos básicos](#basic-requirements)
-- [🙌 Let's start](#lets-start)
-- [📦 Instalar dependencias](#install-dependencies)
-- [💻 Scripts](#scripts)
-- [🛠️ Build and Publish](#build-and-publish)
-- [🔀 Workflows](#workflows)
-- [📤 Commits](#commits)
-- [📄 Changelog](./CHANGELOG.md)
-- [📜 License MIT](license.md)
+# How To Use
 
----
+## Install
 
-> 💬 Este repositorio cuenta con una configuración base para **GitHub Actions**, **Codecov** y **SonarCloud**, las cuales se pueden remover fácilmente del proyecto o bien, terminar de configurarlas para aprovechar al maximo las buenas prácticas.
+#### Using NestJS Schematics
 
-<a name="basic-requirements"></a>
+This will:
 
-## 📝 Requerimientos básicos
+- Install `nest-remix` and its NestJS, Remix, and React dependencies.
+- (Optionally) Update the tsconfig.json with a known working configuration to support NestJS and Remix.
+- (Optionally) Update app.module to use @RemixModule()
+- (Optionally) Add the required NPM scripts
 
-- Node.js v14.15.4 or higher ([Download](https://nodejs.org/es/download/))
-- NPM v6.14.10 or higher
-- NestJS v8.2.0 or higher ([Documentación](https://nestjs.com/))
-- Cuenta en NPM y/o YARN
-
-<a name="lets-start"></a>
-
-## 🙌 Let's start
-
-Con el botón **Use this template**, creamos un repositorio nuevo en nuestro **GitHub** copiando todos los archivos del
-repositorio original, y luego hacemos un `git clone` del mismo.
-
-También podés ejecutar el siguiente script cambiando el nombre de destino
-
-```
-git clone https://github.com/rudemex/nestjs-package-starter.git <nombre-de-destino>
+```bash
+nest add nest-remix
 ```
 
-Example:
+#### Manually
 
+Details coming soon.
+
+## Basic Usage
+
+#### Setup and Configuration
+
+To add the interop layer, update your root module to use `@RemixModule` instead of `@Module` and pass in the build configuration for Remix. For instance:
+
+```ts
+// before
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
+import { Module } from '@nestjs/common';
+
+@RemixModule({
+  publicDir: path.join(process.cwd(), 'public'),
+  browserBuildDir: path.join(process.cwd(), 'build/'),
+  controllers: [AppController],
+  providers: [HelloWorldBackend, AppService],
+  exports: [AppService],
+})
+export class AppModule {}
+
+// after
+import * as path from 'path';
+
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
+import { RemixModule } from 'nest-remix';
+
+@RemixModule({
+  publicDir: path.join(process.cwd(), 'public'),
+  browserBuildDir: path.join(process.cwd(), 'build/'),
+  controllers: [AppController],
+  providers: [AppService],
+  exports: [AppService],
+})
+export class AppModule {}
 ```
-git clone https://github.com/rudemex/nestjs-package-starter.git my-awesome-package
-```
 
-Una vez clonado el repositorio, tenemos que cambiar el `name` del archivo `package.json`, ya que este va a ser el nombre
-del paquete a generar y la `version` la ponemos al valor inicial.
+#### Adding Remix routes
 
-```json
-{
-  ...,
-  "name": "nestjs-package-starter",
-  "version": "x.x.x",
-  ...
-  "name": "my-awesome-package",
-  "version": "0.0.1",
-  ...
+Add all your Remix routes to `src/routes` as you would in a typical Remix application.
+
+#### Using NestJS services as `action` and `loader` functions
+
+The `wireLoader` and `wireAction` functions connect to the RemixModule-decorated module to get providers. By supplying these functions with the type to be used as the backend, nest-remix will route the request appropriately given the `@Loader()` and `@Action()` decorators. Services can be injected into the backend class as expected given their module hierarchy.
+
+It is required to create a new file as the NestJS decorators will attempt to execute as client-side code otherwise, breaking your build. As such, you will need two files for a route now (sorry!) - `{your-route}.tsx` and `{your-route}.server.ts` (you can name it whatever you want, but this is the recommended naming convention).
+
+**Note: backends must be provided/exported to be accessible by the RemixModule-decorated module.**
+
+```tsx
+// src/routes/hello-world.tsx
+import type { ActionFunction, LoaderFunction } from '@remix-run/node';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { wireAction, wireLoader } from 'nest-remix/core.server';
+import { HelloWorldBackend } from './hello-world.server';
+
+export const loader: LoaderFunction = (args) =>
+  wireLoader(HelloWorldBackend, args);
+
+export const action: ActionFunction = (args) =>
+  wireAction(HelloWorldBackend, args);
+
+export default function HelloWorld() {
+  const { message } = useLoaderData<HelloWorldBackend['getMessage']>();
+  const actionData = useActionData<
+    HelloWorldBackend['setMessage'] | HelloWorldBackend['setMessageFallback']
+  >();
+
+  return (
+    <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
+      <h1>Welcome to Remix</h1>
+      <div style={{ marginTop: 20 }}>{actionData?.newMessage || message}</div>
+      <fieldset style={{ marginTop: 20 }}>
+        <legend>Update the message</legend>
+        <Form method="post">
+          <input type="text" name="message" defaultValue={''} />
+          <button>Post update</button>
+        </Form>
+        <Form method="put">
+          <input type="text" name="message" defaultValue={''} />
+          <button>Put update</button>
+        </Form>
+      </fieldset>
+    </div>
+  );
 }
 ```
 
-> 💬 También podés ajustar otras propiedades como el **author**, **description**, **keywords**, etc.
+```ts
+// src/routes/hello-world.server.ts
+import { Body, Injectable, ParseIntPipe, Query } from '@nestjs/common';
+import { LoaderArgs } from '@remix-run/node';
+import { Action, Loader, RemixArgs } from 'nest-remix';
+import { AppService } from './app.service.ts';
 
-<a name="install-dependencies"></a>
+@Injectable()
+export class HelloWorldBackend {
+  constructor(private readonly appService: AppService);
 
-## 📦 Instalar dependencias
+  @Loader()
+  getMessage(
+    @Query('defaultMessage') defaultMessage: string,
+    @Query('counter', ParseIntPipe) _counter: number,
+    @RemixArgs() _remixArgs: LoaderArgs
+  ) {
+    return { message: defaultMessage || this.appService.getDefaultMessage() };
+  }
 
-Estando en la carpeta del proyecto, instalamos sus dependencias con el script.
+  @Action()
+  async setMessageFallback(@Body() body: { message: string }) {
+    return { newMessage: body.message + ' [POST, DELETE]' };
+  }
 
-```
- npm install
-```
-
-<a name="scripts"></a>
-
-## 💻 Scripts
-
-### Inicia los test con coverage
-
-```
-npm run test
-```
-
-### Eslintea el código
-
-```
-npm run lint
-```
-
-### Realiza el build del paquete
-
-Los builds se hacen con una herramienta llamada `@pika/pack` que por debajo usa `rollup`, una vez que el build se
-realizó, vas a encontrar el contenido generado en la carpeta `./pkg` que contiene los diferentes builds, hasta el
-`package.json` con las referencias a los módulos generados.
-
-```
-npm run build
+  @Action.Put()
+  async setMessage(@Body() body: { message: string }) {
+    return { newMessage: body.message + ' [PUT]' };
+  }
+}
 ```
 
-Para probar localmente el paquete antes de publicarlo, podés utilizar el comando `npm link` estando dentro de la
-carpeta `./pkg`, y luego linkearlo en tu proyecto para probarlo. [más info](https://medium.com/@AidThompsin/how-to-npm-link-to-a-local-version-of-your-dependency-84e82126667a)
+##### `action` Routing
 
-```
-cd ./pkg
-npm link
+The `@Action()` decorator will capture all requests to the wired `action` function. Additional routing is possible by using `@Action.Post()`, `@Action.Put()`, and `@Action.Delete()`. It will always fall back to `@Action()` if an HTTP verb is not supplied.
 
-npm link <name-of-package-json>
+##### Accessing the Remix args
 
-npm unlink <name-of-package-json>
-```
+`nest-remix` provides a custom decorator, `@RemixArgs()`. This provides the `LoaderArgs` or `ActionArgs` depending on the type of function.
 
-### Realiza el build del paquete y actualiza la version.
+##### NestJS pipes in `@Action()` and `@Loader()` functions
 
-```
-npm version <tag>
-// npm version v1.2.3
-```
+Pipes should work as expected. They are applied to the NestJS request object, NOT the Remix request. But, the Remix request object is accessible via `@RemixArgs()`.
 
-### Publicar paquete
+## How it works
 
-```
-npm publish
-```
+`@RemixModule` appends a custom controller (`RemixController`) which handles the `@All('*')` route at the root. This controller is at the end of the pipeline, so NestJS will attempt to server the request before it falls back to Remix. During this process, we use the NestJS module ref to provide injectable services for Remix backends.
 
-<a name="build-and-publish"></a>
+## Important notes
 
-## 🛠️ Build and Publish
+### Use `nest-remix/core.server` in your route files
 
-Existen varias maneras para publicar el paquete en **npm**.
+As described in the remix.run "gotcha's" page, it is important to use `.server`-suffixed files from your routes to avoid server-side rendering attempts on your client-side code. A fortunate side-effect of `nest-remix` is that this pattern allows you to funnel all server-side code through `nest-remix/core.server` and `{your-route}.server.ts`, inherently protecting you.
 
-#### Sencilla y rápida
+# Stay In Touch
 
-La manera más sencilla y rápida de publicar el paquete es ejecutar el script de `build` y luego ir dentro de la carpeta
-`./pkg` y ejecutar el script de `publish`.
+- Author - [Kerry Ritter](https://twitter.com/kerryritter) and BeerMoneyDev
 
-```
-npm run build
-cd ./pkg
-npm publish
-```
+## License
 
-> 💬 Podés reemplazar `npm publish` por `yarn publish`, y publicar el paquete tanto en **npm** como **yarn**
-
-#### La manera más óptima
-
-Consiste en ejecutar el script de `version` con el tag correspondiente a desplegar, siguiendo la
-[sintaxis de versionado](https://docs.npmjs.com/about-semantic-versioning). Con esta forma, se actualiza automáticamente
-la version del `package.json`, y solo queda pushear al repositorio los cambios generados.
-
-```bash
-npm version v1.0.1
-cd ./pkg
-npm publish
-
-git push
-```
-
-#### Automatizada
-
-En la carpeta `.github/workflows` se encuentra los procesos automatizados para **GitHub Actions**, en esta se encuentra
-el pipeline para el publish, el cual realiza todos los pasos correspondientes de manera automatizada para compilar el
-paquete, publicarlo y versionar el repositorio con solo seleccionar el tipo de version a desplegar, pero para
-poder utilizar este método, es importante configurar los workflows que se detalla a continuación.
-
-<img src=".readme-static/github-workflow-publish.png" width="300" alt="Workflow to publish" />
-
-<a name="workflows"></a>
-
-## 🔀 Workflows (GitHub Actions)
-
-Para poder hacer uso de los **workflows** que contiene este repositorio, primero debes generar los **tokens**
-correspondientes, o bien eliminar los procesos de los mismos.
-
-En los siguientes links, vas a encontrar toda la documentación para obtener los **tokens** de cada aplicación, que luego
-tendrás que configurarlo en los **secrets** en el repositorio. [Configurar Secret](https://sergiodxa.com/articles/github-actions-npm-publish#configure-the-secret)
-
-#### Secrets
-
-- `GH_EMAIL` GitHub User Email
-- `GH_TOKEN` [Documentación GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
-- `NPM_TOKEN` [Documentación NPM](https://snyk.io/blog/github-actions-to-securely-publish-npm-packages/)
-- `CODECOV_TOKEN` [Documentación Codecov.io](https://github.com/codecov/codecov-action)
-- `SONAR_TOKEN` [Documentación SonarCloud](https://github.com/SonarSource/sonarcloud-github-action)
-
-<a name="commits"></a>
-
-## 📤 Commits
-
-Para los mensajes de commits se toma como
-referencia [`conventional commits`](https://www.conventionalcommits.org/en/v1.0.0-beta.4/#summary).
-
-```
-<type>[optional scope]: <description>
-
-[optional body]
-
-[optional footer]
-```
-
-- **type:** chore, docs, feat, fix, refactor (más comunes)
-- **scope:** indica la página, componente, funcionalidad
-- **description:** comienza en minúsculas y no debe superar los 72 caracteres.
-
-## 📄 Changelog
-
-All notable changes to this project will be documented in [Changelog](./CHANGELOG.md) file.
-
----
-
-<div align="center">
-    <a href="mailto:mdelgado@tresdoce.com.ar" target="_blank" alt="Send an email">
-        <img src="./.readme-static/logo-mex-red.svg" width="120" alt="Mex" />
-    </a><br/>
-    <p>Made with ❤</p>
-</div>
+nest-remix is MIT licensed.
