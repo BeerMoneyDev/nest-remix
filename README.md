@@ -15,6 +15,10 @@
 - Serving of a Remix build through a custom NestJS server implementation.
 - Support of using NestJS @Injectable() services as Remix `action` and `loader` functions via `wireBackend`
 
+# Overview
+
+Check out this video on YouTube about NestJS, Remix, and the goal of `nest-remix`: <a href="https://youtu.be/GGqr20kp28E">Supercharged NestJS React Rendering with Remix</a>
+
 # How To Use
 
 ## Install
@@ -48,11 +52,9 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { Module } from '@nestjs/common';
 
-@RemixModule({
-  publicDir: path.join(process.cwd(), 'public'),
-  browserBuildDir: path.join(process.cwd(), 'build/'),
+@Module({
   controllers: [AppController],
-  providers: [HelloWorldBackend, AppService],
+  providers: [AppService],
   exports: [AppService],
 })
 export class AppModule {}
@@ -160,6 +162,25 @@ export class HelloWorldBackend {
 ##### `action` Routing
 
 The `@Action()` decorator will capture all requests to the wired `action` function. Additional routing is possible by using `@Action.Post()`, `@Action.Put()`, and `@Action.Delete()`. It will always fall back to `@Action()` if an HTTP verb is not supplied.
+
+##### Available routing decorators
+
+###### Function decorators
+
+- `@Loader()` - The loader for a view backend
+- `@Action()` - The action for a view backend
+- `@Action.Post()` - The action for a view backend if the request method is POST
+- `@Action.Put()` - The action for a view backend if the request method is PUT
+- `@Action.Patch()` - The action for a view backend if the request method is PATCH
+- `@Action.Delete()` - The action for a view backend if the request method is DELETE
+
+###### Parameter decorators
+
+- `@RemixArgs()` - Injects the loader or action args
+- `@Query()` - Injects a query parameter by name (pipes are supported)
+- `@Param()` - Injects a route URL parameter by name (pipes are supported)
+- `@Body()` - Injects the request body (pipes are supported)
+- Support coming soon: `@Headers`, `@Session`, `@File`, `@Files`, `@Host`, `@Ip`
 
 ##### Accessing the Remix args
 

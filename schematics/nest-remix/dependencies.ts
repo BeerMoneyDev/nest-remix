@@ -20,6 +20,10 @@ export const dependencies: Dependency[] = [
     type: NodeDependencyType.Dev,
   },
   {
+    name: '@types/react',
+    type: NodeDependencyType.Dev,
+  },
+  {
     name: "@nestjs/serve-static",
     type: NodeDependencyType.Default,
   },

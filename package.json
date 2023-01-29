@@ -1,6 +1,6 @@
 {
   "name": "nest-remix",
-  "version": "0.0.1-alpha1",
+  "version": "0.0.1-alpha6",
   "description": "An interop layer between NestJS and Remix",
   "author": "Kerry Ritter",
   "license": "MIT",
@@ -14,9 +14,17 @@
     "test": "jest --coverage --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "build:schematics": "tsc -p tsconfig.schematics.json",
-    "package": "npm run build && cp package.json dist/package.json && cp .npmrc dist/.npmrc && npm run build:schematics && cp -r schematics dist/schematics",
+    "package": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md && cp .npmrc dist/.npmrc && npm run build:schematics && cp -r schematics dist/schematics",
     "release": "npm publish"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BeerMoneyDev/nest-remix.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BeerMoneyDev/nest-remix/issues"
+  },
+  "homepage": "https://github.com/BeerMoneyDev/nest-remix#readme",
   "peerDependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
