@@ -4,9 +4,8 @@
 package-lock.json
 
 # Schematics
-schematics/**/*.js
+schematics-dist
 schematics/**/*.js.map
-schematics/**/*.d.ts
 
 # Logs
 logs

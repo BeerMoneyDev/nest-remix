@@ -12,6 +12,7 @@
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "rootDir": "schematics/",
+    "outDir": "schematics-dist/",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "sourceMap": true,

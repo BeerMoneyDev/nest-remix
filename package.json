@@ -14,7 +14,7 @@
     "test": "jest --coverage --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "build:schematics": "tsc -p tsconfig.schematics.json",
-    "package": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md && cp .npmrc dist/.npmrc && npm run build:schematics && cp -r schematics dist/schematics",
+    "package": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md && cp .npmrc dist/.npmrc && npm run build:schematics && cp -r schematics-dist dist/schematics",
     "release": "npm publish"
   },
   "repository": {
