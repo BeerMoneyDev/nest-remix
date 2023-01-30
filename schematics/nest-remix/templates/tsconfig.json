@@ -12,9 +12,6 @@
     "incremental": true,
     "strict": true,
     "baseUrl": "./",
-    "paths": {
-      "~/*": ["./src/*"]
-    },
     "lib": ["es2019", "esnext.asynciterable", "DOM", "DOM.Iterable"],
     "module": "commonjs",
     "emitDecoratorMetadata": true,
