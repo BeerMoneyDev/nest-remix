@@ -1,11 +1,22 @@
-import { All, Controller, Next, Req, Res } from '@nestjs/common';
+import {
+  All,
+  Controller,
+  Next,
+  Req,
+  Res,
+  VERSION_NEUTRAL,
+} from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import type { GetLoadContextFunction } from '@remix-run/express';
 import { createRequestHandler } from '@remix-run/express';
 import { NextFunction, Request, Response } from 'express-serve-static-core';
-import { InjectRemixConfig, RemixConfig } from './remix-config';
+import { InjectRemixConfig } from './remix-config';
+import type { RemixConfig } from './remix-config';
+import type { GetLoadContextFunction } from '@remix-run/express';
 
-@Controller('/')
+@Controller({
+  path: '/',
+  version: VERSION_NEUTRAL,
+})
 export class RemixController {
   constructor(
     @InjectRemixConfig() private readonly remixConfig: RemixConfig,
@@ -13,7 +24,11 @@ export class RemixController {
   ) {}
 
   @All('*')
-  handler(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction) {
+  handler(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Next() next: NextFunction,
+  ) {
     if (this.isStaticAsset(req)) {
       return next();
     }
