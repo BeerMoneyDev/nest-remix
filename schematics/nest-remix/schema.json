@@ -22,6 +22,12 @@
       "x-prompt": "Update app.module.ts with @RemixModule() configuration?",
       "description": "Overwrite the package.json scripts",
       "default": true
+    },
+    "useVersioning": {
+      "type": "boolean",
+      "x-prompt": "Use versioning?",
+      "description": "versioning your API, e.g. api/v1/users",
+      "default": true
     }
   }
 }
