@@ -1,21 +1,24 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   assignMetadata,
   ClassProvider,
-  Logger,
   ParamData,
   Paramtype,
   PipeTransform,
   RouteParamMetadata,
   Type,
 } from '@nestjs/common';
-import { PipesConsumer } from '@nestjs/core/pipes';
-import type { ModuleRef } from '@nestjs/core';
-import { ContextUtils } from '@nestjs/core/helpers/context-utils';
-import type { ActionArgs, DataFunctionArgs, LoaderArgs } from '@remix-run/node';
-import { Request, Response } from 'express';
 import { ROUTE_ARGS_METADATA } from '@nestjs/common/constants';
 import { RouteParamtypes } from '@nestjs/common/enums/route-paramtypes.enum';
+import { ContextUtils } from '@nestjs/core/helpers/context-utils';
+import { PipesConsumer } from '@nestjs/core/pipes';
+
 import { isConstructor } from './utils';
+
+import type { ModuleRef } from '@nestjs/core';
+import type { ActionArgs, DataFunctionArgs, LoaderArgs } from '@remix-run/node';
+import type { Request, Response } from 'express';
 
 const getViewBackendTypeName = (backendFn: any) =>
   Reflect.getMetadata('__viewBackendTypeName__', backendFn);
@@ -48,7 +51,11 @@ export const getLoaderProviders = () =>
   });
 
 export const Loader = () => {
-  return function (target: any, propertyKey: string, _descriptor: PropertyDescriptor) {
+  return function (
+    target: any,
+    propertyKey: string,
+    _descriptor: PropertyDescriptor,
+  ) {
     const type = target.constructor;
     if (!viewBackendMap.has(type.name)) {
       viewBackendMap.set(type.name, {
@@ -61,13 +68,22 @@ export const Loader = () => {
     viewBackendMap.set(type.name, {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       ...viewBackendMap.get(type.name)!,
-      loaderMethods: [...(viewBackendMap.get(type.name)?.loaderMethods || []), propertyKey],
+      loaderMethods: [
+        ...(viewBackendMap.get(type.name)?.loaderMethods || []),
+        propertyKey,
+      ],
     });
   };
 };
 
-const createActionFn = (method: 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'ALL') => {
-  return function (target: any, propertyKey: string, _descriptor: PropertyDescriptor) {
+const createActionFn = (
+  method: 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'ALL',
+) => {
+  return function (
+    target: any,
+    propertyKey: string,
+    _descriptor: PropertyDescriptor,
+  ) {
     const type = target.constructor;
     if (!viewBackendMap.has(type.name)) {
       viewBackendMap.set(type.name, {
@@ -81,7 +97,10 @@ const createActionFn = (method: 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'ALL') => 
     viewBackendMap.set(type.name, {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       ...viewBackendMap.get(type.name)!,
-      actionMethods: [...(viewBackendMap.get(type.name)?.actionMethods || []), propertyKey],
+      actionMethods: [
+        ...(viewBackendMap.get(type.name)?.actionMethods || []),
+        propertyKey,
+      ],
     });
   };
 };
@@ -100,7 +119,9 @@ export type ExpressActionArgs = ActionArgs & { req: Request; res: Response };
 function createRouteParamDecorator(paramtype: RouteParamtypes) {
   return (data?: ParamData): ParameterDecorator =>
     (target, key, index) => {
-      const args = Reflect.getMetadata(ROUTE_ARGS_METADATA, target.constructor, key) || {};
+      const args =
+        Reflect.getMetadata(ROUTE_ARGS_METADATA, target.constructor, key!) ||
+        {};
       Reflect.defineMetadata(
         ROUTE_ARGS_METADATA,
         assignMetadata<RouteParamtypes, Record<number, RouteParamMetadata>>(
@@ -110,7 +131,7 @@ function createRouteParamDecorator(paramtype: RouteParamtypes) {
           data,
         ),
         target.constructor,
-        key,
+        key!,
       );
     };
 }
@@ -138,11 +159,17 @@ async function parseArgumentsAndPipe(
 
   await Promise.allSettled(
     Object.entries(metadata).map(async ([key, xconfig]) => {
-      const paramType = parseInt(key.split(':').shift()!) as any as RouteParamtypes;
+      const paramType = parseInt(
+        key.split(':').shift()!,
+      ) as any as RouteParamtypes;
       const config = xconfig as Config;
 
       const pipes = config.pipes.map((p) => moduleRef.get(p) as PipeTransform);
-      const argMetadata = { metatype: null as any, type: 'custom' as Paramtype, data: config.data };
+      const argMetadata = {
+        metatype: null as any,
+        type: 'custom' as Paramtype,
+        data: config.data,
+      };
 
       try {
         if (paramType === RouteParamtypes.QUERY) {
@@ -168,7 +195,11 @@ async function parseArgumentsAndPipe(
               pipes,
             );
           } else {
-            functionParams[config.index] = await pipesConsumer.apply(req.body, argMetadata, pipes);
+            functionParams[config.index] = await pipesConsumer.apply(
+              req.body,
+              argMetadata,
+              pipes,
+            );
           }
         } else if (paramType === (REMIX_ARGS_METADATA_KEY as any)) {
           functionParams[config.index] = args;
@@ -188,21 +219,29 @@ async function wireBackendFn<ViewBackendFn extends (...args: any) => any>(
   args: LoaderArgs | ActionArgs,
 ): Promise<ReturnType<ViewBackendFn>> {
   const moduleRef = args.context.moduleRef as ModuleRef;
-  const viewbackendConfig = viewBackendMap.get(getViewBackendTypeName(viewBackendFn));
+  const viewbackendConfig = viewBackendMap.get(
+    getViewBackendTypeName(viewBackendFn),
+  );
 
   const { req } = getReqAndRes(args);
 
-  const viewbackInstance = moduleRef.get(`VIEWBACKEND_${getViewBackendTypeName(viewBackendFn)}`);
+  const viewbackInstance = moduleRef.get(
+    `VIEWBACKEND_${getViewBackendTypeName(viewBackendFn)}`,
+  );
 
   const functionName = viewBackendFn.name;
 
   if (actionOrLoader === 'loader') {
     if (!viewbackendConfig?.loaderMethods?.includes(functionName as any)) {
-      throw new Error(`Couldn't find a loader with name ${functionName as any}`);
+      throw new Error(
+        `Couldn't find a loader with name ${functionName as any}`,
+      );
     }
   } else {
     if (!viewbackendConfig?.actionMethods?.includes(functionName as any)) {
-      throw new Error(`Couldn't find an action with name ${functionName as any}`);
+      throw new Error(
+        `Couldn't find an action with name ${functionName as any}`,
+      );
     }
   }
 
@@ -227,7 +266,9 @@ export function wireLoader<LoaderFnT extends (...args: any) => any>(
   if (isConstructor(type)) {
     const loaderMethodNames = viewBackendMap.get(type.name)?.loaderMethods;
     if (!loaderMethodNames?.[0]?.length) {
-      throw new Error(`Could not find an @Loader wiring for the provided type ${type.name}.`);
+      throw new Error(
+        `Could not find an @Loader wiring for the provided type ${type.name}.`,
+      );
     }
     return wireLoader(type.prototype[loaderMethodNames[0]], loaderArgs);
   }
@@ -246,7 +287,9 @@ export function wireAction<ActionFnT extends (...args: any) => any>(
       backendFnOrType.find((a) => getViewBackendMethod(a) === 'ALL');
 
     if (!routedActionFn) {
-      throw new Error('Could not find an @Action wiring for the provided functions.');
+      throw new Error(
+        'Could not find an @Action wiring for the provided functions.',
+      );
     }
 
     return wireAction(routedActionFn, actionArgs);
@@ -257,9 +300,13 @@ export function wireAction<ActionFnT extends (...args: any) => any>(
   if (isConstructor(type)) {
     const actionMethodsNames = viewBackendMap.get(type.name)?.actionMethods;
     if (!actionMethodsNames?.[0]?.length) {
-      throw new Error(`Could not find an @Loader wiring for the provided type ${type.name}.`);
+      throw new Error(
+        `Could not find an @Loader wiring for the provided type ${type.name}.`,
+      );
     }
-    const actionFns = actionMethodsNames.map((a) => type.prototype[a]) as ActionFnT[];
+    const actionFns = actionMethodsNames.map(
+      (a) => type.prototype[a],
+    ) as ActionFnT[];
     return wireAction(actionFns, actionArgs);
   }
 
