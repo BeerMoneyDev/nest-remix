@@ -10,13 +10,8 @@ import {
   Source,
   forEach,
 } from '@angular-devkit/schematics';
-import {
-  NodePackageInstallTask,
-} from '@angular-devkit/schematics/tasks';
-import {
-  addPackageJsonDependency,
-  NodeDependency,
-} from '@schematics/angular/utility/dependencies';
+import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
+import { addPackageJsonDependency, NodeDependency } from '@schematics/angular/utility/dependencies';
 import { dependencies, Dependency, getLatestDependencyVersion } from './dependencies';
 import { npmScripts } from './npm-scripts';
 import { Schema } from './schema';
@@ -42,8 +37,8 @@ function addDependencies(dependencies: Dependency[]): Rule {
   return (tree, context) => {
     return Promise.allSettled(
       dependencies.map((dependency) =>
-        getLatestDependencyVersion(dependency.name).then(
-          ({ name, version }) => {
+        getLatestDependencyVersion(dependency.name)
+          .then(({ name, version }) => {
             context.logger.info(`✅️ Added ${name}@${version}`);
             const nodeDependency: NodeDependency = {
               name,
@@ -51,16 +46,16 @@ function addDependencies(dependencies: Dependency[]): Rule {
               type: dependency.type,
             };
             addPackageJsonDependency(tree, nodeDependency);
-          },
-        ).catch(() => {
-          context.logger.info(`✅️ Added ${dependency.name}@latest`);
-          const nodeDependency: NodeDependency = {
-            name: dependency.name,
-            version: dependency.satisfies || 'latest',
-            type: dependency.type,
-          };
-          addPackageJsonDependency(tree, nodeDependency);
-        }),
+          })
+          .catch(() => {
+            context.logger.info(`✅️ Added ${dependency.name}@latest`);
+            const nodeDependency: NodeDependency = {
+              name: dependency.name,
+              version: dependency.satisfies || 'latest',
+              type: dependency.type,
+            };
+            addPackageJsonDependency(tree, nodeDependency);
+          }),
       ),
     ).then(() => tree) as ReturnType<Rule>;
   };
@@ -69,7 +64,7 @@ function addDependencies(dependencies: Dependency[]): Rule {
 function addNpmScripts(options: Schema): Rule {
   return (tree: Tree, context) => {
     if (options.overwriteNpmScripts === false) {
-      return tree
+      return tree;
     }
 
     const pkgPath = 'package.json';
@@ -83,18 +78,18 @@ function addNpmScripts(options: Schema): Rule {
 
     context.logger.info(`✅️ Added build and start scripts`);
 
-    npmScripts.map(
-      (npmScript) => (pkg.scripts[npmScript.name] = npmScript.command),
-    );
+    npmScripts.map((npmScript) => (pkg.scripts[npmScript.name] = npmScript.command));
 
     tree.overwrite(pkgPath, JSON.stringify(pkg, null, 2));
     return tree;
   };
 }
 
-
 function copyFiles(options: Schema): Rule {
-  return applyWithOverwrite(url('./templates'), options.overwriteTsconfig === false ? ['tsconfig.json', 'tsconfig.nest.json'] : [])
+  return applyWithOverwrite(
+    url('./templates'),
+    options.overwriteTsconfig === false ? ['tsconfig.json', 'tsconfig.nest.json'] : [],
+  );
 }
 
 function applyWithOverwrite(source: Source, skipFiles: string[]): Rule {
@@ -102,7 +97,7 @@ function applyWithOverwrite(source: Source, skipFiles: string[]): Rule {
     const rule = mergeWith(
       apply(source, [
         forEach((fileEntry) => {
-          if (skipFiles.some(s => fileEntry.path.includes(s))) {
+          if (skipFiles.some((s) => fileEntry.path.includes(s))) {
             return null;
           }
           if (!tree.exists(fileEntry.path)) {
@@ -111,7 +106,6 @@ function applyWithOverwrite(source: Source, skipFiles: string[]): Rule {
           tree.overwrite(fileEntry.path, fileEntry.content);
           return null;
         }),
-
       ]),
     );
 
@@ -131,53 +125,50 @@ function updateAppModule(options: Schema) {
     }),`;
 
     let newContent = `import * as path from 'path';
-import { RemixModule } from 'nest-remix';
+import { RemixModule } from '@pyxlab/nest-remix';
 import { HelloWorldBackend } from './app/routes/hello-world.server';
   
 @Module({`;
 
-  newContent = fileContents.replace(`@Module({`, newContent);
+    newContent = fileContents.replace(`@Module({`, newContent);
 
-  if (newContent.includes(`imports: [],`)) {
-    newContent = newContent.replace(
-      `imports: []`,
-      `imports: [
+    if (newContent.includes(`imports: [],`)) {
+      newContent = newContent.replace(
+        `imports: []`,
+        `imports: [
   ${remixModuleTs}
 ]`,
-    );
-  } else if (newContent.includes(`imports: [`)) {
-    newContent = newContent.replace(
-      `imports: [`,
-      `imports: [
+      );
+    } else if (newContent.includes(`imports: [`)) {
+      newContent = newContent.replace(
+        `imports: [`,
+        `imports: [
   ${remixModuleTs}`,
-    );
-  } else {
-    newContent = newContent.replace(
-      `@Module({`,
-      `@Module({
+      );
+    } else {
+      newContent = newContent.replace(
+        `@Module({`,
+        `@Module({
 imports: [
   ${remixModuleTs}
 ], `,
-    );
-  }
+      );
+    }
 
-  if (newContent.includes(`providers: [`)) {
-    newContent = newContent.replace(
-      `providers: [`,
-      `providers: [HelloWorldBackend, `,
-    );
-  } else {
-    newContent = newContent.replace(
-      `})
+    if (newContent.includes(`providers: [`)) {
+      newContent = newContent.replace(`providers: [`, `providers: [HelloWorldBackend, `);
+    } else {
+      newContent = newContent.replace(
+        `})
 export class`,
-      `  providers: [HelloWorldBackend],
+        `  providers: [HelloWorldBackend],
 })
 export class`,
-    );
-  }
+      );
+    }
 
     return newContent;
-  })
+  });
 }
 
 function updateGitIgnore() {
@@ -188,7 +179,7 @@ function updateGitIgnore() {
 /public/build
 *.tsbuildinfo
 .cache`;
-  })
+  });
 }
 
 function replaceFileContents(fileName: string, applyChanges: (fileContents: string) => string) {
@@ -210,26 +201,31 @@ function replaceFileContents(fileName: string, applyChanges: (fileContents: stri
 
 function updateMainTs(options: Schema): Rule {
   return replaceFileContents('src/main.ts', (fileContents: string) => {
-    if (options.useVersioning === false) {
-      return fileContents;
-    }
-
     return `import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { VersioningType } from '@nestjs/common';
+import { RequestMethod${options.useVersioning ? ', VersioningType ' : ' '}} from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableVersioning({
+${options.useVersioning ? `  app.enableVersioning({
     type: VersioningType.URI,
-    prefix: 'api/v',
+    prefix: 'v',
     defaultVersion: ['1'],
+  });
+` : ''}
+  app.setGlobalPrefix('api', {
+    exclude: [
+      {
+        path: '*',
+        method: RequestMethod.ALL,
+      },
+    ],
   });
 
   await app.listen(3000);
 }
 bootstrap();
 `;
-  })
+  });
 }
