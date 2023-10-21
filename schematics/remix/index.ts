@@ -33,6 +33,7 @@ export function nestRemixAdd(_options: Schema): Rule {
       copyFiles(_options),
       updateAppModule(_options),
       updateGitIgnore(),
+      updateMainTs(_options),
     ]);
   };
 }
@@ -46,7 +47,7 @@ function addDependencies(dependencies: Dependency[]): Rule {
             context.logger.info(`✅️ Added ${name}@${version}`);
             const nodeDependency: NodeDependency = {
               name,
-              version,
+              version: dependency.satisfies || version,
               type: dependency.type,
             };
             addPackageJsonDependency(tree, nodeDependency);
@@ -55,7 +56,7 @@ function addDependencies(dependencies: Dependency[]): Rule {
           context.logger.info(`✅️ Added ${dependency.name}@latest`);
           const nodeDependency: NodeDependency = {
             name: dependency.name,
-            version: 'latest',
+            version: dependency.satisfies || 'latest',
             type: dependency.type,
           };
           addPackageJsonDependency(tree, nodeDependency);
@@ -123,21 +124,57 @@ function updateAppModule(options: Schema) {
     if (options.overwriteAppModule === false) {
       return fileContents;
     }
-    const remixModuleTs = `@RemixModule({
-  publicDir: path.join(process.cwd(), 'public'),
-  browserBuildDir: path.join(process.cwd(), 'build/'),`;
+
+    const remixModuleTs = `   RemixModule.forRoot({
+      publicDir: path.join(process.cwd(), 'public'),
+      browserBuildDir: path.join(process.cwd(), 'build/'),
+    }),`;
 
     let newContent = `import * as path from 'path';
 import { RemixModule } from 'nest-remix';
-import { HelloWorldBackend } from './routes/hello-world.server';
-` + fileContents.toString().replace(`@Module({`, remixModuleTs)
+import { HelloWorldBackend } from './app/routes/hello-world.server';
+  
+@Module({`;
 
-    if (newContent.includes(`providers: [`)) {
-      newContent = newContent.replace(`providers: [`, `providers: [HelloWorldBackend, `);
-    } else {
-      newContent = newContent.replace(remixModuleTs, `${remixModuleTs}
-providers: [HelloWorldBackend],`)
-    }
+  newContent = fileContents.replace(`@Module({`, newContent);
+
+  if (newContent.includes(`imports: [],`)) {
+    newContent = newContent.replace(
+      `imports: []`,
+      `imports: [
+  ${remixModuleTs}
+]`,
+    );
+  } else if (newContent.includes(`imports: [`)) {
+    newContent = newContent.replace(
+      `imports: [`,
+      `imports: [
+  ${remixModuleTs}`,
+    );
+  } else {
+    newContent = newContent.replace(
+      `@Module({`,
+      `@Module({
+imports: [
+  ${remixModuleTs}
+], `,
+    );
+  }
+
+  if (newContent.includes(`providers: [`)) {
+    newContent = newContent.replace(
+      `providers: [`,
+      `providers: [HelloWorldBackend, `,
+    );
+  } else {
+    newContent = newContent.replace(
+      `})
+export class`,
+      `  providers: [HelloWorldBackend],
+})
+export class`,
+    );
+  }
 
     return newContent;
   })
@@ -169,4 +206,30 @@ function replaceFileContents(fileName: string, applyChanges: (fileContents: stri
     tree.overwrite(fileName, newContents);
     return tree;
   };
+}
+
+function updateMainTs(options: Schema): Rule {
+  return replaceFileContents('src/main.ts', (fileContents: string) => {
+    if (options.useVersioning === false) {
+      return fileContents;
+    }
+
+    return `import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { VersioningType } from '@nestjs/common';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+    prefix: 'api/v',
+    defaultVersion: ['1'],
+  });
+
+  await app.listen(3000);
+}
+bootstrap();
+`;
+  })
 }

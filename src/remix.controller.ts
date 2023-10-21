@@ -1,11 +1,29 @@
-import { All, Controller, Next, Req, Res } from '@nestjs/common';
-import { ModuleRef } from '@nestjs/core';
-import type { GetLoadContextFunction } from '@remix-run/express';
+import {
+  All,
+  Controller,
+  Next,
+  Req,
+  Res,
+  VERSION_NEUTRAL,
+  VersioningType,
+} from '@nestjs/common';
+import { ApplicationConfig, ModuleRef } from '@nestjs/core';
 import { createRequestHandler } from '@remix-run/express';
-import { NextFunction, Request, Response } from 'express-serve-static-core';
-import { InjectRemixConfig, RemixConfig } from './remix-config';
+import type {
+  NextFunction,
+  Request,
+  Response,
+} from 'express-serve-static-core';
 
-@Controller('/')
+import { InjectRemixConfig } from './remix-config';
+
+import type { RemixConfig } from './remix-config';
+import type { GetLoadContextFunction } from '@remix-run/express';
+
+@Controller({
+  path: '/',
+  version: VERSION_NEUTRAL,
+})
 export class RemixController {
   constructor(
     @InjectRemixConfig() private readonly remixConfig: RemixConfig,
@@ -13,7 +31,40 @@ export class RemixController {
   ) {}
 
   @All('*')
-  handler(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction) {
+  handler(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Next() next: NextFunction,
+  ) {
+    const appConfig = this.moduleRef.get(ApplicationConfig);
+    const versioning = appConfig.getVersioning();
+
+    if (versioning?.type === VersioningType.URI) {
+      const prefix = versioning.prefix;
+
+      if (prefix && req.url.startsWith(`/${prefix}`)) {
+        return next();
+      }
+    } else if (versioning?.type === VersioningType.MEDIA_TYPE) {
+      const key = versioning.key;
+
+      if (key && req.headers['accept']?.includes(`;${key}`)) {
+        return next();
+      }
+    } else if (versioning?.type === VersioningType.HEADER) {
+      const header = versioning.header.toLocaleLowerCase();
+
+      if (header && req.headers[header]) {
+        return next();
+      }
+    }
+
+    const globalPrefix = appConfig.getGlobalPrefix();
+
+    if (globalPrefix && req.url.startsWith(`/${globalPrefix}`)) {
+      return next();
+    }
+
     if (this.isStaticAsset(req)) {
       return next();
     }

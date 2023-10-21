@@ -3,8 +3,8 @@
   "schematics": {
     "nest-add": {
       "description": "Adds Remix support to the NestJS application",
-      "factory": "./nest-remix/index#nestRemixAdd",
-      "schema": "./nest-remix/schema.json"
+      "factory": "./remix/index#nestRemixAdd",
+      "schema": "./remix/schema.json"
     }
   }
 }

@@ -1,5 +1,5 @@
 import { Body, Injectable, ParseIntPipe, Query } from '@nestjs/common';
-import { LoaderArgs } from '@remix-run/node';
+import {  LoaderFunctionArgs } from '@remix-run/node';
 import { Action, Loader, RemixArgs } from 'nest-remix/core.server';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class HelloWorldBackend {
   getMessage(
     @Query('defaultMessage') defaultMessage: string,
     @Query('counter', ParseIntPipe) _counter: number,
-    @RemixArgs() _remixArgs: LoaderArgs,
+    @RemixArgs() _remixArgs: LoaderFunctionArgs,
   ) {
     return { message: defaultMessage };
   }
