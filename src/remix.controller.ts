@@ -1,19 +1,7 @@
-import {
-  All,
-  Controller,
-  Next,
-  Req,
-  Res,
-  VERSION_NEUTRAL,
-  VersioningType,
-} from '@nestjs/common';
+import { All, Controller, Next, Req, Res, VERSION_NEUTRAL, VersioningType } from '@nestjs/common';
 import { ApplicationConfig, ModuleRef } from '@nestjs/core';
 import { createRequestHandler } from '@remix-run/express';
-import type {
-  NextFunction,
-  Request,
-  Response,
-} from 'express-serve-static-core';
+import type { NextFunction, Request, Response } from 'express-serve-static-core';
 
 import { InjectRemixConfig } from './remix-config';
 
@@ -31,16 +19,16 @@ export class RemixController {
   ) {}
 
   @All('*')
-  handler(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Next() next: NextFunction,
-  ) {
+  handler(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction) {
     const appConfig = this.moduleRef.get(ApplicationConfig);
     const versioning = appConfig.getVersioning();
+    let globalPrefix = appConfig.getGlobalPrefix();
+
+    globalPrefix = globalPrefix?.startsWith('/') ? globalPrefix.slice(1) : globalPrefix;
+    globalPrefix = globalPrefix?.endsWith('/') ? globalPrefix.slice(0, -1) : globalPrefix;
 
     if (versioning?.type === VersioningType.URI) {
-      const prefix = versioning.prefix;
+      const prefix = globalPrefix + '/' + versioning?.prefix;
 
       if (prefix && req.url.startsWith(`/${prefix}`)) {
         return next();
@@ -58,8 +46,6 @@ export class RemixController {
         return next();
       }
     }
-
-    const globalPrefix = appConfig.getGlobalPrefix();
 
     if (globalPrefix && req.url.startsWith(`/${globalPrefix}`)) {
       return next();
