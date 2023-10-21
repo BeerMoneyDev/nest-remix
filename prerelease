@@ -1,0 +1,28 @@
+#!/bin/sh
+
+echo '\033[0;32m🔨 Building the project source\033[0m'
+npm run build
+
+clear
+
+echo '\033[0;32m📦 Copying package.json into the dist folder\033[0m'
+cp package.json dist/package.json
+
+sleep 1
+clear
+
+echo '\033[0;33m🛠️ Building the schematics\033[0m'
+npm run build:schematics
+
+clear
+
+echo '\033[0;33m📂 Copying schematics to dist\033[0m'
+cp -r schematics-dist dist/schematics
+cp schematics/collection.json dist/schematics/collection.json
+cp schematics/remix/schema.json dist/schematics/remix/schema.json
+cp -r schematics/remix/templates dist/schematics/remix/templates
+
+sleep 1
+clear
+
+echo '\033[0;32m✅ Pre-release completed successfully\033[0m'
