@@ -4,6 +4,7 @@ import { get } from 'http';
 export interface Dependency {
   name: string;
   type: NodeDependencyType;
+  satisfies?: string;
 }
 
 export const dependencies: Dependency[] = [
@@ -14,6 +15,7 @@ export const dependencies: Dependency[] = [
   {
     name: '@remix-run/dev',
     type: NodeDependencyType.Dev,
+    satisfies: "^1.19.3",
   },
   {
     name: '@remix-run/eslint-config',
@@ -42,6 +44,7 @@ export const dependencies: Dependency[] = [
   {
     name: "@remix-run/serve",
     type: NodeDependencyType.Default,
+    satisfies:  "^1.19.3",
   },
   {
     name: "react",
@@ -50,12 +53,29 @@ export const dependencies: Dependency[] = [
   {
     name: "react-dom",
     type: NodeDependencyType.Default,
+  },
+  {
+    name: "@types/react-dom",
+    type: NodeDependencyType.Dev,
+  },
+  {
+    name: "tsup",
+    type: NodeDependencyType.Default,
+  },
+  {
+    name: "@swc/core",
+    type: NodeDependencyType.Dev,
+  },
+  {
+    name: "@swc/cli",
+    type: NodeDependencyType.Dev,
   }
 ];
 
 export interface NodePackage {
   name: string;
   version: string;
+  satisfies?: string;
 }
 
 export function getLatestDependencyVersion(

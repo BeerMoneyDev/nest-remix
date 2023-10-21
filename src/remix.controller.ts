@@ -9,7 +9,11 @@ import {
 } from '@nestjs/common';
 import { ApplicationConfig, ModuleRef } from '@nestjs/core';
 import { createRequestHandler } from '@remix-run/express';
-import { NextFunction, Request, Response } from 'express-serve-static-core';
+import type {
+  NextFunction,
+  Request,
+  Response,
+} from 'express-serve-static-core';
 
 import { InjectRemixConfig } from './remix-config';
 

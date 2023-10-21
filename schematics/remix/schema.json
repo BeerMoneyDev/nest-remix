@@ -1,9 +1,9 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "NestPrismaSchematics",
-  "title": "Prisma Support Schema",
+  "$id": "RemixSchematics",
+  "title": "Remix Support Schema",
   "type": "object",
-  "description": "Add Prisma support to the NestJS application",
+  "description": "Add Remix support to the NestJS application",
   "properties": {
     "overwriteTsconfig": {
       "type": "boolean",

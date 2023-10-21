@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   assignMetadata,
   ClassProvider,
   ParamData,
   Paramtype,
-  PipeTransform,
   RouteParamMetadata,
   Type,
 } from '@nestjs/common';
@@ -16,8 +14,8 @@ import { PipesConsumer } from '@nestjs/core/pipes';
 
 import { isConstructor } from './utils';
 
-import type { ModuleRef } from '@nestjs/core';
-import type { ActionArgs, DataFunctionArgs, LoaderArgs } from '@remix-run/node';
+import { type ModuleRef } from '@nestjs/core';
+import type { ActionFunctionArgs, DataFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import type { Request, Response } from 'express';
 
 const getViewBackendTypeName = (backendFn: any) =>
@@ -30,7 +28,7 @@ const getViewBackendMethod = (backendFn: any) =>
 const setViewBackendMethod = (backendFn: any, methodName: string) =>
   Reflect.defineMetadata('__viewBackendMethodName__', methodName, backendFn);
 
-const getReqAndRes = (args: LoaderArgs | ActionArgs) => {
+const getReqAndRes = (args: LoaderFunctionArgs | ActionFunctionArgs) => {
   const res = args.context.res as Response;
   const req = args.context.req as Request;
 
@@ -113,8 +111,8 @@ Action.Put = () => createActionFn('PUT');
 Action.Patch = () => createActionFn('PATCH');
 Action.Delete = () => createActionFn('DELETE');
 
-export type ExpressLoaderArgs = LoaderArgs & { req: Request; res: Response };
-export type ExpressActionArgs = ActionArgs & { req: Request; res: Response };
+export type ExpressLoaderArgs = LoaderFunctionArgs & { req: Request; res: Response };
+export type ExpressActionArgs = ActionFunctionArgs & { req: Request; res: Response };
 
 function createRouteParamDecorator(paramtype: RouteParamtypes) {
   return (data?: ParamData): ParameterDecorator =>
@@ -164,25 +162,34 @@ async function parseArgumentsAndPipe(
       ) as any as RouteParamtypes;
       const config = xconfig as Config;
 
-      const pipes = config.pipes.map((p) => moduleRef.get(p) as PipeTransform);
       const argMetadata = {
         metatype: null as any,
         type: 'custom' as Paramtype,
         data: config.data,
       };
 
+      const pipes = config.pipes.map((pipe) => {
+        if (isConstructor(pipe)) {
+          return new pipe();
+        }
+
+        return pipe;
+      });
+
       try {
         if (paramType === RouteParamtypes.QUERY) {
           argMetadata.type = 'query';
+          const query = req.query[config.data];
           functionParams[config.index] = await pipesConsumer.apply(
-            req.query[config.data],
+            query,
             argMetadata,
             pipes,
           );
         } else if (paramType === RouteParamtypes.PARAM) {
           argMetadata.type = 'param';
+          const param = args.params[config.data];
           functionParams[config.index] = await pipesConsumer.apply(
-            req.params[config.data],
+            param,
             argMetadata,
             pipes,
           );
@@ -204,7 +211,7 @@ async function parseArgumentsAndPipe(
         } else if (paramType === (REMIX_ARGS_METADATA_KEY as any)) {
           functionParams[config.index] = args;
         }
-      } catch {
+      } catch (err) {
         functionParams[config.index] = undefined;
       }
     }),
@@ -216,7 +223,7 @@ async function parseArgumentsAndPipe(
 async function wireBackendFn<ViewBackendFn extends (...args: any) => any>(
   actionOrLoader: 'action' | 'loader',
   viewBackendFn: ViewBackendFn,
-  args: LoaderArgs | ActionArgs,
+  args: LoaderFunctionArgs | ActionFunctionArgs,
 ): Promise<ReturnType<ViewBackendFn>> {
   const moduleRef = args.context.moduleRef as ModuleRef;
   const viewbackendConfig = viewBackendMap.get(
@@ -259,7 +266,7 @@ type Config = { index: number; data: any; pipes: Type[] };
 
 export function wireLoader<LoaderFnT extends (...args: any) => any>(
   backendFnOrType: LoaderFnT | Type,
-  loaderArgs: LoaderArgs,
+  loaderArgs: LoaderFunctionArgs,
 ): Promise<ReturnType<LoaderFnT>> {
   const type = backendFnOrType as any as Type;
   const backendFn = backendFnOrType as any as LoaderFnT;
@@ -278,7 +285,7 @@ export function wireLoader<LoaderFnT extends (...args: any) => any>(
 
 export function wireAction<ActionFnT extends (...args: any) => any>(
   backendFnOrType: ActionFnT | ActionFnT[] | Type,
-  actionArgs: ActionArgs,
+  actionArgs: ActionFunctionArgs,
 ): Promise<ReturnType<ActionFnT>> {
   if (Array.isArray(backendFnOrType)) {
     const { req } = getReqAndRes(actionArgs);

@@ -6,17 +6,29 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "strictPropertyInitialization": false,
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true,
+    "paths": {
+      "~/*": ["./src/*"]
+    },
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "strict": true,
+    "noEmitOnError": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "lib": ["es2019", "esnext.asynciterable", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "moduleResolution": "node",
+    "noEmit": true
   },
   "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "src/**/*.tsx"]
 }

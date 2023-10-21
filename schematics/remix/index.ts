@@ -47,7 +47,7 @@ function addDependencies(dependencies: Dependency[]): Rule {
             context.logger.info(`✅️ Added ${name}@${version}`);
             const nodeDependency: NodeDependency = {
               name,
-              version,
+              version: dependency.satisfies || version,
               type: dependency.type,
             };
             addPackageJsonDependency(tree, nodeDependency);
@@ -56,7 +56,7 @@ function addDependencies(dependencies: Dependency[]): Rule {
           context.logger.info(`✅️ Added ${dependency.name}@latest`);
           const nodeDependency: NodeDependency = {
             name: dependency.name,
-            version: 'latest',
+            version: dependency.satisfies || 'latest',
             type: dependency.type,
           };
           addPackageJsonDependency(tree, nodeDependency);
@@ -124,21 +124,57 @@ function updateAppModule(options: Schema) {
     if (options.overwriteAppModule === false) {
       return fileContents;
     }
-    const remixModuleTs = `@RemixModule({
-  publicDir: path.join(process.cwd(), 'public'),
-  browserBuildDir: path.join(process.cwd(), 'build/'),`;
+
+    const remixModuleTs = `   RemixModule.forRoot({
+      publicDir: path.join(process.cwd(), 'public'),
+      browserBuildDir: path.join(process.cwd(), 'build/'),
+    }),`;
 
     let newContent = `import * as path from 'path';
 import { RemixModule } from 'nest-remix';
-import { HelloWorldBackend } from './routes/hello-world.server';
-` + fileContents.toString().replace(`@Module({`, remixModuleTs)
+import { HelloWorldBackend } from './app/routes/hello-world.server';
+  
+@Module({`;
 
-    if (newContent.includes(`providers: [`)) {
-      newContent = newContent.replace(`providers: [`, `providers: [HelloWorldBackend, `);
-    } else {
-      newContent = newContent.replace(remixModuleTs, `${remixModuleTs}
-providers: [HelloWorldBackend],`)
-    }
+  newContent = fileContents.replace(`@Module({`, newContent);
+
+  if (newContent.includes(`imports: [],`)) {
+    newContent = newContent.replace(
+      `imports: []`,
+      `imports: [
+  ${remixModuleTs}
+]`,
+    );
+  } else if (newContent.includes(`imports: [`)) {
+    newContent = newContent.replace(
+      `imports: [`,
+      `imports: [
+  ${remixModuleTs}`,
+    );
+  } else {
+    newContent = newContent.replace(
+      `@Module({`,
+      `@Module({
+imports: [
+  ${remixModuleTs}
+], `,
+    );
+  }
+
+  if (newContent.includes(`providers: [`)) {
+    newContent = newContent.replace(
+      `providers: [`,
+      `providers: [HelloWorldBackend, `,
+    );
+  } else {
+    newContent = newContent.replace(
+      `})
+export class`,
+      `  providers: [HelloWorldBackend],
+})
+export class`,
+    );
+  }
 
     return newContent;
   })
@@ -193,6 +229,7 @@ async function bootstrap() {
 
   await app.listen(3000);
 }
-      `;
+bootstrap();
+`;
   })
 }
