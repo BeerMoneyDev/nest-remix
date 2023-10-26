@@ -1,6 +1,6 @@
 {
   "name": "nest-remix",
-  "version": "0.0.1-alpha6",
+  "version": "0.0.1-alpha6.0",
   "description": "An interop layer between NestJS and Remix",
   "author": "Kerry Ritter",
   "license": "MIT",
