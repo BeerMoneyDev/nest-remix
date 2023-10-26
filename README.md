@@ -13,7 +13,10 @@
 # Features
 
 - Serving of a Remix build through a custom NestJS server implementation.
-- Support of using NestJS @Injectable() services as Remix `action` and `loader` functions via `wireBackend`
+- Support of using NestJS @Injectable() services as Remix `action` and `loader` functions via `wireBacken
+- Support of NestJS pipes in `action` and `loader` into backend services
+- Support of [NestJS versioning](https://docs.nestjs.com/techniques/versioning) routing controllers
+- Support of [NestJS global prefix](https://docs.nestjs.com/faq/global-prefix) in app module
 
 # Overview
 
@@ -31,6 +34,7 @@ This will:
 - (Optionally) Update the tsconfig.json with a known working configuration to support NestJS and Remix.
 - (Optionally) Update app.module to use @RemixModule()
 - (Optionally) Add the required NPM scripts
+- (Optionally) Add versioning to the app module
 
 ```bash
 nest add nest-remix
@@ -44,7 +48,11 @@ Details coming soon.
 
 #### Setup and Configuration
 
-To add the interop layer, update your root module to use `@RemixModule` instead of `@Module` and pass in the build configuration for Remix. For instance:
+To add the interop layer, import the `RemixModule` from `nest-remix` into your NestJS application module. The RemixModule takes a configuration object with the following properties
+
+- `publicDir` - The directory where your Remix public assets reside. This is the directory that Remix will build into.
+- browserBuildDir` - The directory where your Remix browser build is located. This is the directory Remix will build into.
+- serverBuildDir` - The directory where your Remix server build is located. This is the directory Remix will build into.
 
 ```ts
 // before
@@ -64,11 +72,16 @@ import * as path from 'path';
 
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
+import { Module } from '@nestjs/common';
 import { RemixModule } from 'nest-remix';
 
-@RemixModule({
-  publicDir: path.join(process.cwd(), 'public'),
-  browserBuildDir: path.join(process.cwd(), 'build/'),
+@Module({
+  imports: [
+    RemixModule.forRoot({
+      publicDir: path.join(process.cwd(), 'public'),
+      browserBuildDir: path.join(process.cwd(), 'build/'),
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
   exports: [AppService],
@@ -78,7 +91,7 @@ export class AppModule {}
 
 #### Adding Remix routes
 
-Add all your Remix routes to `src/routes` as you would in a typical Remix application.
+Add all your Remix routes to `src/app/routes` as you would in a typical Remix application.
 
 #### Using NestJS services as `action` and `loader` functions
 
@@ -89,7 +102,7 @@ It is required to create a new file as the NestJS decorators will attempt to exe
 **Note: backends must be provided/exported to be accessible by the RemixModule-decorated module.**
 
 ```tsx
-// src/routes/hello-world.tsx
+// src/app/routes/hello-world.tsx
 import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { Form, useActionData, useLoaderData } from '@remix-run/react';
 import { wireAction, wireLoader } from 'nest-remix/core.server';
@@ -128,9 +141,9 @@ export default function HelloWorld() {
 ```
 
 ```ts
-// src/routes/hello-world.server.ts
+// src/app/routes/hello-world.server.ts
 import { Body, Injectable, ParseIntPipe, Query } from '@nestjs/common';
-import { LoaderArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from '@remix-run/node';
 import { Action, Loader, RemixArgs } from 'nest-remix';
 import { AppService } from './app.service.ts';
 
@@ -142,7 +155,7 @@ export class HelloWorldBackend {
   getMessage(
     @Query('defaultMessage') defaultMessage: string,
     @Query('counter', ParseIntPipe) _counter: number,
-    @RemixArgs() _remixArgs: LoaderArgs
+    @RemixArgs() _remixArgs: LoaderFunctionArgs
   ) {
     return { message: defaultMessage || this.appService.getDefaultMessage() };
   }
