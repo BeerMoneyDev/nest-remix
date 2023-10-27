@@ -13,7 +13,7 @@
 # Features
 
 - Serving of a Remix build through a custom NestJS server implementation.
-- Support of using NestJS @Injectable() services as Remix `action` and `loader` functions via `wireBacken
+- Support of using NestJS @Injectable() services as Remix `action` and `loader` functions via `wireBacken`
 - Support of NestJS pipes in `action` and `loader` into backend services
 - Support of [NestJS versioning](https://docs.nestjs.com/techniques/versioning) routing controllers
 - Support of [NestJS global prefix](https://docs.nestjs.com/faq/global-prefix) in app module
@@ -51,8 +51,8 @@ Details coming soon.
 To add the interop layer, import the `RemixModule` from `nest-remix` into your NestJS application module. The RemixModule takes a configuration object with the following properties
 
 - `publicDir` - The directory where your Remix public assets reside. This is the directory that Remix will build into.
-- browserBuildDir` - The directory where your Remix browser build is located. This is the directory Remix will build into.
-- serverBuildDir` - The directory where your Remix server build is located. This is the directory Remix will build into.
+- `browserBuildDir` - The directory where your Remix browser build is located. This is the directory Remix will build into.
+- `serverBuildDir` - The directory where your Remix server build is located. This is the directory Remix will build into.
 
 ```ts
 // before
